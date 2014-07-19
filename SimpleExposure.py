@@ -1,6 +1,6 @@
 import numpy
-import pylibapogee as apg
-import pylibapogee_setup as SetupDevice
+import pylibapogee.pylibapogee as apg
+import pylibapogee.pylibapogee_setup as SetupDevice
 import pyfits
 import re
 import logging

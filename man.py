@@ -1,4 +1,4 @@
 #/usr/bin/env python
-import pylibapogee
+import pylibapogee.pylibapogee
 
 help(pylibapogee)
