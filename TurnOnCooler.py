@@ -1,5 +1,5 @@
 #/usr/bin/env python
-import SimpleExposure
+import MultiExposure
 import logging
 import sys
 
@@ -9,8 +9,9 @@ logging.basicConfig(level=logging.CRITICAL,
                         )
 
 if __name__ == "__main__":
-        cam = SimpleExposure.GetCamConnection()
-	cam.SetCoolerSetPoint( -20. )
-	cam.SetCooler( True )
-        cam.CloseConnection()
+        cams = MultiExposure.GetCamConnection()
+	for cam in cams:
+		cam.SetCoolerSetPoint( -20. )
+		cam.SetCooler( True )
+		cam.CloseConnection()
 
