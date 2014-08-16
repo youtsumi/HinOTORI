@@ -67,12 +67,10 @@ def camprocess( camid ):
 	#print some basic info
 	print cam, camid
 	row = cam.GetMaxImgRows()
-	col = cam.GetMaxImgCols()
+#	col = cam.GetMaxImgCols()
+	col = cam.GetMaxImgCols() + cam.GetNumOverscanCols()
+	cam.SetRoiNumCols(cam.GetMaxImgCols() + cam.GetNumOverscanCols())
 	print "Imaging rows = %d, columns = %d" % ( row, col )
-
-
-	cam.SetCooler( True )
-
 
 	count = 1
 	cam.SetImageCount( count )
@@ -80,7 +78,8 @@ def camprocess( camid ):
 	exposeTime = float(sys.argv[1])
 	print "Starting %f sec light exposure" % (exposeTime) 
 	expdatetime = datetime.datetime.utcnow()
-	cam.StartExposure( exposeTime, True )
+#	cam.StartExposure( exposeTime, True )
+	cam.StartExposure( exposeTime, False )
 			
 	status = None
 	while status != apg.Status_ImageReady:
@@ -118,9 +117,11 @@ if __name__ == "__main__":
 	#                    filemode='w')
 
 	cams = GetCamConnection()
-	pool=Pool(len(cams))
-#	pool.apply(camprocess,zip(cams,range(len(cams))))
-	pool.map(camprocess,range(len(cams)))
-#	pool.map(test,range(len(cams)))
+	for i in range(3):
+		time.sleep(5)
+		pool=Pool(len(cams))
+	#	pool.apply(camprocess,zip(cams,range(len(cams))))
+		pool.map(camprocess,range(len(cams)))
+	#	pool.map(test,range(len(cams)))
 	pool.close()
 

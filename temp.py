@@ -21,6 +21,7 @@ if __name__ == "__main__":
 						ret = getattr(cam,method)()
 						logging.debug("ccd[%d]%s: %s" % ( i, method, ret ) )
 				except AttributeError:
+					time.sleep(10)
 					pass
 				cam.CloseConnection()
 			time.sleep(60)
@@ -29,4 +30,5 @@ if __name__ == "__main__":
 			exit(0)
 
 		except:
-			raise
+			time.sleep(10)
+			pass

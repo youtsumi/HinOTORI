@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.CRITICAL,
 if __name__ == "__main__":
         cams = MultiExposure.GetCamConnection()
 	for cam in cams:
-		cam.SetCoolerSetPoint( -20. )
+		cam.SetCoolerSetPoint( -30. )
 		cam.SetCooler( True )
 		cam.CloseConnection()
 

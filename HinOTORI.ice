@@ -10,7 +10,16 @@ module HinOTORI {
 		void SetTemperature(  );
 	};
 
-	interface Telescope{ 
+	interface Telescope { 
+		double GetFocusZ(  );
+		void SetFocusZ( double z );
+		void OpenMirror(  );
+		void CloseMirror(  );
+	};
+
+	interface Mount { 
+		double GetRa(  );
+		double GetDec(  );
 	};
 
 };

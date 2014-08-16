@@ -2,6 +2,7 @@
 import MultiExposure
 import logging
 import sys
+import time
 
 logging.basicConfig(level=logging.CRITICAL,
                         format='%(asctime)s %(levelname)-8s %(message)s',
@@ -12,7 +13,6 @@ if __name__ == "__main__":
         cams = MultiExposure.GetCamConnection()
 	for cam in cams:
 		print cam
-		cam.SetCoolerSetPoint(30.0)
 		cam.SetFanMode(0) 
 		cam.SetCooler( False )
 		cam.CloseConnection()
