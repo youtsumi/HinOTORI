@@ -20,6 +20,8 @@ module HinOTORI {
 	interface Mount { 
 		double GetRa(  );
 		double GetDec(  );
+		void SetRa( double radeg );
+		void SetDec( double decdeg );
+		void Goto( );
 	};
-
 };
