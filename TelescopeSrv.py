@@ -2,6 +2,7 @@
 import sys, traceback, Ice, os
 Ice.loadSlice("HinOTORI.ice")
 import HinOTORI
+import AllunaToolKit
 import time
 
 class TelescopeServer(Ice.Application):
@@ -17,18 +18,21 @@ class TelescopeServer(Ice.Application):
 		self.communicator().waitForShutdown()
 		return 0
 
-class Telescope(HinOTORI.Telescope):
+class Telescope(HinOTORI.Telescope,AllunaToolKit.Telescope):
 	def __init__(self):
 		self.z=0.
 		HinOTORI.Telescope.__init__(self)
-
+		AllunaToolKit.Telescope.__init__(self)
+		self.Connect()
 
 	def GetFocusZ(self,current=None):
+		self.z = self.FocusingPosition()
 		print "Telescope: z= %lf" % self.z
 		return self.z
 
 	def SetFocusZ(self,targetz,current=None):
 		self.z=targetz
+		self.FocusingTargetPosition(self.z)
 
 if __name__ == "__main__":
 	app = TelescopeServer()
