@@ -1,6 +1,8 @@
 """
 A pyhton script to control the GUI application named "TCS" developed by Alluna.
-Because ASCOM does not have dustcover capability, there is no way to control dust cover from CUI.
+TCS supports the ASCOM interface to provide a kind of APIs to handle itself,
+however, ASCOM does not have dustcover capability,
+there is no way to control dust cover from CUI.
 That is the reason to develop this script.
 
 2014.5.8 Yousuke Utsumi
