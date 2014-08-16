@@ -4,6 +4,8 @@ HinOTORI is a project to develop a new robotic telescope with 3 colours simultan
 
 Once you run "LaunchAlluna.bat" on a windows machine, then you can control TCS, cameras with client softwares outside if you make network connections appropriately.
 
+This software assumes the cameras (Apogee) are connected to one Linux machine.
+
 The process communication is established by Internet Communication Engine (Ice). This middleware is based on Sun Remote Procedure Call.
 
 Requirement
