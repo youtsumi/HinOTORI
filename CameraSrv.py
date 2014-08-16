@@ -23,15 +23,17 @@ class Camera(HinOTORI.Camera):
 		HinOTORI.Camera.__init__(self)
 		self.idnum = idnum
 
-	def Take(self,expt,filename,shutter,current=None):
+	def Take(self,expt,filename,shutter,fitsheader,current=None):
+		for fitsitem in fitsheader:
+			print fitsitem
 		print "Take %lf" % expt
 		time.sleep(expt)
 		print "finish"
 		return
 
-	def Take_async(self,_cb,expt,filename,shutter,current=None):
+	def Take_async(self,_cb,expt,filename,shutter,fitsheader,current=None):
 		try:
-			self.Take(expt,filename,shutter,current)
+			self.Take(expt,filename,shutter,fitsheader,current)
 			_cb.ice_response()
 		except:
 			_cb.ice_exception(HinOTORI.Error("Error test"))
