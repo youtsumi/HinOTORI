@@ -10,8 +10,8 @@ The process communication is established by Internet Communication Engine (Ice).
 
 Requirement
 -----------
-- Ice3.5.1 with python2.7(32bit)
-- pywinauto
+- Ice 3.5.1 with python2.7(32bit)
+- pywinauto -- This only supports 32bit python from my understanding. If it's wrong, you can go 64bit.
 - Alluna Telescope Control System 10.6
 - libapogee
 
