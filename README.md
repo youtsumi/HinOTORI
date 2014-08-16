@@ -2,13 +2,13 @@ HinOTORI Control softwares
 ==========================
 HinOTORI is a project to develop a new robotic telescope with 3 colours simultaneous imaging system in Tibet. This software package enables the telescope system to be robotic.
 
+The process communication is established by Internet Communication Engine (Ice). This is a very convenient middleware to establish communications over nodes using the Sun Remote Procedure Call.
+
 You should copy this softwares on your related machines. Also you should setup Ice on each node.
 
 Once you run "LaunchAlluna.bat" on a windows machine, then you can control TCS, cameras with client softwares outside if you make network connections appropriately. If you hate windows screen, you should prepare Ice with ptyhon cabability and Alluna TCS, and then just put this batch file on the "start up" menu.n
 
 This software assumes for the camera control that the cameras (Apogee) are connected to one Linux machine.
-
-The process communication is established by Internet Communication Engine (Ice). This middleware is based on Sun Remote Procedure Call.
 
 Requirement
 -----------
