@@ -12,6 +12,11 @@ Requirement
 - pywinauto
 - Alluna Telescope Control System 10.6
 - libapogee
+Links
+-----
+- http://www.alluna-optics.com
+- http://www.zeroc.com/ice.html
+- http://hinotori.hiroshima-u.ac.jp
 
 AUTHOR
 ------
@@ -19,8 +24,3 @@ Yousuke Utsumi (youtsumi@hiroshima-u.ac.jp)
 
 ![logo](http://hinotori.hiroshima-u.ac.jp/logo.jpg)
 
-Links
------
-http://www.alluna-optics.com
-http://www.zeroc.com/ice.html
-http://hinotori.hiroshima-u.ac.jp
