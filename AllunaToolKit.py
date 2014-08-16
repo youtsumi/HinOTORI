@@ -43,6 +43,7 @@ class Telescope:
             [ (self.tabcontrol.GetTabText(i), i) for i in range(self.tabcontrol.TabCount())])
 
         print "Get tab content in Settings to handle tabs"        
+        self._MoveTab("Settings") # need to move to get labels before do it
         self.settingstabcontrol=controls.common_controls.TabControlWrapper(self.app_form[u"TTabControl2"])
         self.settingstabdict = dict( \
             [ (self.settingstabcontrol.GetTabText(i), i) for i in range(self.settingstabcontrol.TabCount())])
