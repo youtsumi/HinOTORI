@@ -24,6 +24,7 @@ class Telescope(HinOTORI.Telescope,AllunaToolKit.Telescope):
 		HinOTORI.Telescope.__init__(self)
 		AllunaToolKit.Telescope.__init__(self)
 		self.Connect()
+		self.FocusingHomePosition()
 
 	def GetFocusZ(self,current=None):
 		self.z = self.FocusingPosition()
