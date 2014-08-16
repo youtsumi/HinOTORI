@@ -10,7 +10,7 @@ import datetime
 import time
 from multiprocessing import Pool
 
-def GetCamConnection( ):
+def GetCamConnections( ):
 	print "Trying to find and connect with camera"
 	#look for usb cameras first
 	devices = SetupDevice.GetUsbDevices()
@@ -28,6 +28,25 @@ def GetCamConnection( ):
 	cams=map( lambda i: SetupDevice.CreateAndConnectCam( devices[i] ), range(len(devices)))
 
 	return cams
+
+def GetCamConnection( num ):
+	print "Trying to find and connect with camera"
+	#look for usb cameras first
+	devices = SetupDevice.GetUsbDevices()
+
+
+	# no usb cameras, then look for ethernet cameras
+	if( len(devices) == 0 ):
+	    devices = SetupDevice.GetEthernetDevices()
+	    
+	# exception....no cameras anywhere....
+	if( len(devices) == 0 ):
+	    raise RuntimeError( "No devices found on usb or ethernet" )
+	    
+	# connect to the first camera
+
+	return SetupDevice.CreateAndConnectCam( devices[num] )
+
 
 
 def GetCameraInfo( obj ):
@@ -60,7 +79,7 @@ def GetCameraInfo( obj ):
 	return ccdinfo
 
 
-def camprocess( camid ):
+def camprocess( camid, exposeTime, extraheader ):
 #	print caminfo
 #	(cam, camid) = caminfo
 	cam = cams[camid]
@@ -74,8 +93,6 @@ def camprocess( camid ):
 
 	count = 1
 	cam.SetImageCount( count )
-
-	exposeTime = float(sys.argv[1])
 	print "Starting %f sec light exposure" % (exposeTime) 
 	expdatetime = datetime.datetime.utcnow()
 #	cam.StartExposure( exposeTime, True )
@@ -103,11 +120,14 @@ def camprocess( camid ):
 			('EXPTIME',	exposeTime,				"Exposure Time") ]:
 		header.append((k,v,c))
 
+	if extraheader is not None:
+		for k, v, c in extraheader:
+			header.append((k,v,c))
+
 	pyfits.writeto( "%s%s-%d.fits" % (imgName, expdatetime.strftime("%Y%m%d%H%M%S"),camid), \
 					data.reshape((row,col)), header=header )
 	print data.mean(), data.std()
 						
-	cam.CloseConnection()
 
 if __name__ == "__main__":
 	logging.basicConfig(level=logging.DEBUG,
@@ -116,7 +136,7 @@ if __name__ == "__main__":
 	#                    filename='/temp/myapp.log',
 	#                    filemode='w')
 
-	cams = GetCamConnection()
+	cams = GetCamConnections()
 	for i in range(3):
 		time.sleep(5)
 		pool=Pool(len(cams))
@@ -124,4 +144,7 @@ if __name__ == "__main__":
 		pool.map(camprocess,range(len(cams)))
 	#	pool.map(test,range(len(cams)))
 	pool.close()
+
+	for i in range(3):
+		cams[i].CloseConnection()
 

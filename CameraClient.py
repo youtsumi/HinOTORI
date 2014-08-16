@@ -48,11 +48,10 @@ class CameraClient(Ice.Application):
 
 		for i in range(camnum):
 			header=[
-				["Focus","%lf" % self.z, "Focus position in mm"],
-				["RA","%lf" % self.ra, "Target position"],
-				["Dec","%lf" % self.dec, "Target position"],
-				["UFNAME", filename, "Original filename" ],
-				["EXPTIME","%lf" % exposuretime, "Exposure time in sec"]
+				("Focus","%lf" % self.z, "Focus position in mm"),
+				("RA","%lf" % self.ra, "Target position"),
+				("Dec","%lf" % self.dec, "Target position"),
+				("UFNAME", filename, "Original filename" )
 				]
 
 			obj = self.communicator().stringToProxy("ApogeeCam%d:default -p 10000" % i)

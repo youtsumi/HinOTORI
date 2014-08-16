@@ -1,6 +1,6 @@
 
 module HinOTORI {
-	["python:seq:list"] sequence<string> FitsItem; 
+	["python:seq:tuple"] sequence<string> FitsItem; 
 	["python:seq:list"] sequence<FitsItem> FitsHeader; 
 
 	exception Error {
@@ -8,7 +8,10 @@ module HinOTORI {
 	};
 
 	interface Camera { 
-		["amd"] void Take( double expt, string filename, bool shutter, ["python:seq:list"] FitsHeader header )
+		["amd"] void Take( 
+			double expt, 
+			string filename, 
+			bool shutter, ["python:seq:list"] FitsHeader header )
 			throws Error;
 		double GetTemperature(  );
 		void SetTemperature(  );

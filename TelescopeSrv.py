@@ -34,6 +34,13 @@ class Telescope(HinOTORI.Telescope,AllunaToolKit.Telescope):
 		self.z=targetz
 		self.FocusingTargetPosition(self.z)
 
+	def OpenMirror(self,current=None):
+		self.DustcoverOpen()
+
+	def CloseMirror(self,current=None):
+		self.DustcoverClose()
+
+
 if __name__ == "__main__":
 	app = TelescopeServer()
 	status = app.main(sys.argv)

@@ -2,6 +2,7 @@
 import sys, traceback, Ice, os
 Ice.loadSlice("HinOTORI.ice")
 import HinOTORI
+import MultiExposure
 import time
 
 class CameraServer(Ice.Application):
@@ -22,12 +23,23 @@ class Camera(HinOTORI.Camera):
 	def __init__(self,idnum):
 		HinOTORI.Camera.__init__(self)
 		self.idnum = idnum
+		try:
+			self.cam = MultiExposure.GetCamConnection(idnum)
+		except:
+			self.cam = None
+
+	def __del__(self):
+		if self.cam is not None:
+			sefl.cam.closeConnection()
 
 	def Take(self,expt,filename,shutter,fitsheader,current=None):
 		for fitsitem in fitsheader:
 			print fitsitem
 		print "Take %lf" % expt
-		time.sleep(expt)
+		if self.cam is not None:
+			MultiExposure.camprocess(self.cam,expt,fitsheader)
+		else:
+			time.sleep(expt)
 		print "finish"
 		return
 
