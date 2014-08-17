@@ -87,6 +87,7 @@ class Telescope:
     def DustcoverStatus(self):
         """Try to retrieve the mirror cover"""
         self._MoveTab("Dustcover")
+	self._WaitCompletion()
         return self.app_form["Button2"].Texts()
     
     def DustcoverOpen(self):
