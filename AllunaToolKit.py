@@ -92,13 +92,11 @@ class Telescope:
     
     def DustcoverOpen(self):
         """Try to open the mirror cover"""
-	self.Connect()
         self._DustcoverControl("Open")
 
     def DustcoverClose(self):
         """Try to close the mirror cover"""
         self._DustcoverControl("Close")
-        self.app.kill_()
 
     def _WaitCompletion(self):
         """Waits to completion of something to do"""
