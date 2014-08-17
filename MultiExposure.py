@@ -79,10 +79,10 @@ def GetCameraInfo( obj ):
 	return ccdinfo
 
 
-def camprocess( camid, exposeTime, extraheader ):
+def camprocess( camid, filename, exposeTime, extraheader ):
 #	print caminfo
 #	(cam, camid) = caminfo
-	cam = cams[camid]
+	cam = camid
 	#print some basic info
 	print cam, camid
 	row = cam.GetMaxImgRows()
@@ -124,8 +124,7 @@ def camprocess( camid, exposeTime, extraheader ):
 		for k, v, c in extraheader:
 			header.append((k,v,c))
 
-	pyfits.writeto( "%s%s-%d.fits" % (imgName, expdatetime.strftime("%Y%m%d%H%M%S"),camid), \
-					data.reshape((row,col)), header=header )
+	pyfits.writeto( filename, data.reshape((row,col)), header=header )
 	print data.mean(), data.std()
 						
 

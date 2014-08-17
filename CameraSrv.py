@@ -5,14 +5,21 @@ import HinOTORI
 import MultiExposure
 import time
 
+camnum=3
 class CameraServer(Ice.Application):
 	def run(self,args):
 		self.shutdownOnInterrupt()	# make sure clean up
 		adapter = self.communicator().createObjectAdapterWithEndpoints(
                         os.path.basename(__file__), "default -p 10000")
 
-		for i in range(3):
-			camera = Camera(i)
+		try:
+			cams=MultiExposure.GetCamConnections()
+		except:
+			cams=[None]*camnum
+			print traceback.format_exc()
+
+		for i in range(camnum):
+			camera = Camera(i,cams[i])
 			adapter.add(camera, self.communicator().stringToIdentity("ApogeeCam%d" % i))
 
 		adapter.activate()
@@ -20,24 +27,21 @@ class CameraServer(Ice.Application):
 		return 0
 
 class Camera(HinOTORI.Camera):
-	def __init__(self,idnum):
+	def __init__(self,idnum,cam):
 		HinOTORI.Camera.__init__(self)
 		self.idnum = idnum
-		try:
-			self.cam = MultiExposure.GetCamConnection(idnum)
-		except:
-			self.cam = None
+		self.cam = cam
 
 	def __del__(self):
 		if self.cam is not None:
-			sefl.cam.closeConnection()
+			self.cam.closeConnection()
 
 	def Take(self,expt,filename,shutter,fitsheader,current=None):
 		for fitsitem in fitsheader:
 			print fitsitem
 		print "Take %lf" % expt
 		if self.cam is not None:
-			MultiExposure.camprocess(self.cam,expt,fitsheader)
+			MultiExposure.camprocess(self.cam,filename,expt,fitsheader)
 		else:
 			time.sleep(expt)
 		print "finish"
@@ -48,7 +52,7 @@ class Camera(HinOTORI.Camera):
 			self.Take(expt,filename,shutter,fitsheader,current)
 			_cb.ice_response()
 		except:
-			_cb.ice_exception(HinOTORI.Error("Error test"))
+			_cb.ice_exception(HinOTORI.Error(traceback.format_exc()))
 
 	def GetTemperature(self,current=None):
 		print "GetTemperature[%d]: " % self.idnum

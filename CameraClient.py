@@ -3,6 +3,7 @@ import sys, traceback, Ice, os
 Ice.loadSlice("HinOTORI.ice")
 import HinOTORI
 from optparse import OptionParser
+import datetime
 
 status = 0
 camnum = 3
@@ -41,12 +42,16 @@ class CameraClient(Ice.Application):
 		A class method to communicate with the cameras
 		"""
 
+		expdatetime = datetime.datetime.utcnow()
 		cameras = []
 		aptr = []	# array for an pointer to the asynchronous method invocation
-		filename = "test.fits"
-		exposuretime = 1.0
+		if self.options.expt!=None:
+			exposuretime = float(self.options.expt)
+		else:
+			exposuretime = 1.0
 
 		for i in range(camnum):
+			filename = "object%s-%d.fits" % ( expdatetime.strftime("%Y%m%d%H%M%S"), i )
 			header=[
 				("Focus","%lf" % self.z, "Focus position in mm"),
 				("RA","%lf" % self.ra, "Target position"),
@@ -70,6 +75,8 @@ class CameraClient(Ice.Application):
 		parser = OptionParser()
 		parser.add_option("-z", "--focus-z", dest="focusz",
                   help="set focus z", metavar="FILE")
+		parser.add_option("-t", "--exp-t", dest="expt",
+                  help="set exp t", metavar="FILE")
 
 		(options, myargs) = parser.parse_args(args)
 		self.options = options
