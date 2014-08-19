@@ -5,6 +5,7 @@ import HinOTORI
 import MultiExposure
 import time
 import config
+import git
 
 camnum=len(config.camera)
 
@@ -41,15 +42,23 @@ class CameraServer(Ice.Application):
 
 class Camera(HinOTORI.Camera):
 	def __init__(self,idnum,cam):
-		HinOTORI.Camera.__init__(self)
 		self.idnum = idnum
 		self.cam = cam
+		repo = git.Repo(os.path.basename(__file__))
+		headcommit = repo.head.commit
+		self.hexsha=headcommit.hexsha
+		self.author=headcommit.author.name
+		HinOTORI.Camera.__init__(self)
 
 	def __del__(self):
 		if self.cam is not None:
 			self.cam.closeConnection()
 
 	def Take(self,expt,filename,shutter,fitsheader,current=None):
+		fitsheader.extend([ 
+			("GITHASH",self.hexsha,"A hash key of this software"),
+			("GITAUTHO",self.author,"Last commiter name"),
+		 ])
 		for fitsitem in fitsheader:
 			print fitsitem
 		print "Take %lf" % expt

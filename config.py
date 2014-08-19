@@ -45,3 +45,6 @@ mount = {
 	'mounttype': 'KanataAzEl',
 	'status': '/dev/shm/TELstatus'
 }
+
+import datetime
+targetdir = "/storage/HinOTORI/%s/" % datetime.date.today().strftime("%Y%m%d")

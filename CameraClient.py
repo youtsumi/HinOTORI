@@ -55,6 +55,7 @@ class CameraClient(Ice.Application):
 		"""
 		A class method to communicate with the cameras
 		"""
+		os.system("mkdir -p %s" % self.options.path)
 
 		expdatetime = datetime.datetime.utcnow()
 		cameras = []
@@ -67,19 +68,19 @@ class CameraClient(Ice.Application):
 
 			header=[
 				("FOCUS","%lf" % self.z, "Focus position in mm"),
-				("RA-DEG","%lf" % (self.ra/math.pi*180.), "Target position"),
-				("DEC-DEG","%lf" % (self.dec/math.pi*180.), "Target position"),
-				("RA","%s" % ephem.hours(self.ra), "Target position"),
+				("RA-DEG","%lf" % (self.ra/math.pi*180.), "Target position in degree"),
+				("DEC-DEG","%lf" % (self.dec/math.pi*180.), "Target position in degree"),
+				("RA","%s" % ephem.hours(self.ra), "Target position in hour angle"),
 				("DEC","%s" % ephem.degrees(self.dec), "Target position"),
-				("AZ","%lf" % self.az, "Target position"),
-				("EL","%lf" % self.el, "Target position"),
+				("AZ","%lf" % self.az, "Target position in degree"),
+				("EL","%lf" % self.el, "Target position in degree"),
 				("UFNAME", filename, "Original filename" ),
 				("FILTER", config.camera[i]['filter'], "Filter name" ),
 				("INSTRUME", "HinOTORI" , "Hiroshima University Operated Tibet Optical Robotic Imager" ),
 				("OBSERVER", self.options.user , "Name of observers" ),
 				("OBJECT", self.options.objectname , "Name of target object" ),
-				("LONGITUD", "%lf" % config.location["longitude"], "Observatory Location" ),
-				("LATITUDE", "%lf" % config.location["latitude"] , "Observatory Location" ),
+				("LONGITUD", "%lf" % config.location["longitude"], "Longitude of Observatory Location" ),
+				("LATITUDE", "%lf" % config.location["latitude"] , "Latitude of Observatory Location" ),
 				("MOUNTTYP", config.mount["mounttype"] , "Mount type" )
 				]
 
@@ -88,7 +89,7 @@ class CameraClient(Ice.Application):
 					config.nodesetting['camera']['ip'], \
 					config.nodesetting['camera']['port'] ))
 			cameras.append( HinOTORI.CameraPrx.checkedCast(obj) )
-			aptr.append(cameras[i].begin_Take(exposuretime,filename,True,header))
+			aptr.append(cameras[i].begin_Take(exposuretime,self.options.path+filename,True,header))
 
 		for i in range(len(config.camera)):
 			if aptr[i] == None:
@@ -108,6 +109,8 @@ class CameraClient(Ice.Application):
                   help="set object", metavar="FILE",default="TEST")
 		parser.add_option("-u", "--observer", dest="user",
                   help="set user", metavar="FILE",default="GOD")
+		parser.add_option("-p", "--path", dest="path",
+                  help="set target dir", metavar="FILE",default=config.targetdir)
 
 
 		(options, myargs) = parser.parse_args(args)
