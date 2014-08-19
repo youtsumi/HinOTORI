@@ -27,7 +27,7 @@ class CameraServer(Ice.Application):
 				cfg=filter(lambda x: x['serial']==int(cams[i].GetSerialNumber()), config.camera)[0]
 			except:
 				raise HinOTORI.Error("Camera may not have appropriate serial number or it is not included in configration file")
-			camera = Camera(cfg['uid'],cams[cfg['uid']])
+			camera = Camera(cfg['uid'],cams[i])
 			adapter.add(camera, \
 				self.communicator().stringToIdentity("ApogeeCam%d" % cfg['uid']))
 

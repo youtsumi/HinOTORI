@@ -59,7 +59,6 @@ class CameraClient(Ice.Application):
 			exposuretime = 1.0
 
 		for i in range(len(config.camera)):
-			print config.camera[i]['filter']
 			filename = "object%s-%d.fits" \
 				% ( expdatetime.strftime("%Y%m%d%H%M%S"), config.camera[i]['uid'] )
 			header=[
