@@ -14,7 +14,11 @@ class MountServer(Ice.Application):
                                         config.nodesetting["mount"]['port'] \
                                 ))
 
-                mount = KanataMount()
+		if config.mount["mounttype"] == "KanataAzEl":
+			mount = KanataMount()
+		else:
+			mount = Mount()
+
                 adapter.add(mount, self.communicator().stringToIdentity("Mount"))
 
                 adapter.activate()
