@@ -1,6 +1,4 @@
 module HinOTORI {
-	["python:seq:tuple"] sequence<string> FitsItem; 
-	["python:seq:list"] sequence<FitsItem> FitsHeader; 
 
 	exception Error {
 		string reason;
@@ -11,7 +9,7 @@ module HinOTORI {
 			double expt, 
 			string filename, 
 			bool shutter,
-			FitsHeader header )
+			string header )
 			throws Error;
 		double GetTemperature(  );
 		void SetTemperature(  );

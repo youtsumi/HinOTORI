@@ -35,6 +35,12 @@ class Mount(HinOTORI.Mount):
         def GetDec(self,current=None):
 		return 0.
 
+        def GetAz(self,current=None):
+		return 0.
+
+        def GetEl(self,current=None):
+		return 0.
+
 	def SetRa(self,radeg,current=None):
 		pass
 

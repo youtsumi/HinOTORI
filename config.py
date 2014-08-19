@@ -42,7 +42,8 @@ location = {
 
 ### configuration for the mount
 mount = {
-	'mounttype': 'KanataAzEl',
+#	'mounttype': 'KanataAzEl',
+	'mounttype': 'Simulator',
 	'status': '/dev/shm/TELstatus'
 }
 

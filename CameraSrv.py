@@ -6,6 +6,7 @@ import MultiExposure
 import time
 import config
 import git
+import pyfits
 
 camnum=len(config.camera)
 
@@ -55,12 +56,12 @@ class Camera(HinOTORI.Camera):
 			self.cam.closeConnection()
 
 	def Take(self,expt,filename,shutter,fitsheader,current=None):
+		fitsheader=pyfits.Header.fromstring(fitsheader)
 		fitsheader.extend([ 
 			("GITHASH",self.hexsha,"A hash key of this software"),
 			("GITAUTHO",self.author,"Last commiter name"),
 		 ])
-		for fitsitem in fitsheader:
-			print fitsitem
+		print repr(fitsheader)
 		print "Take %lf" % expt
 		if self.cam is not None:
 			MultiExposure.camprocess(self.cam,filename,expt,fitsheader)

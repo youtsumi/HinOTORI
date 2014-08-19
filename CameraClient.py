@@ -7,6 +7,7 @@ import datetime
 import config
 import ephem
 import math
+import pyfits
 
 status = 0
 
@@ -66,30 +67,30 @@ class CameraClient(Ice.Application):
 			filename = "object%s-%d.fits" \
 				% ( expdatetime.strftime("%Y%m%d%H%M%S"), config.camera[i]['uid'] )
 
-			header=[
-				("FOCUS","%lf" % self.z, "Focus position in mm"),
-				("RA-DEG","%lf" % (self.ra/math.pi*180.), "Target position in degree"),
-				("DEC-DEG","%lf" % (self.dec/math.pi*180.), "Target position in degree"),
+			header=pyfits.Header([
+				("FOCUS", self.z, "Focus position in mm"),
+				("RA-DEG", (self.ra/math.pi*180.), "Target position in degree"),
+				("DEC-DEG", (self.dec/math.pi*180.), "Target position in degree"),
 				("RA","%s" % ephem.hours(self.ra), "Target position in hour angle"),
 				("DEC","%s" % ephem.degrees(self.dec), "Target position"),
-				("AZ","%lf" % self.az, "Target position in degree"),
-				("EL","%lf" % self.el, "Target position in degree"),
+				("AZ", self.az, "Target position in degree"),
+				("EL", self.el, "Target position in degree"),
 				("UFNAME", filename, "Original filename" ),
 				("FILTER", config.camera[i]['filter'], "Filter name" ),
 				("INSTRUME", "HinOTORI" , "Hiroshima University Operated Tibet Optical Robotic Imager" ),
 				("OBSERVER", self.options.user , "Name of observers" ),
 				("OBJECT", self.options.objectname , "Name of target object" ),
-				("LONGITUD", "%lf" % config.location["longitude"], "Longitude of Observatory Location" ),
-				("LATITUDE", "%lf" % config.location["latitude"] , "Latitude of Observatory Location" ),
+				("LONGITUD", config.location["longitude"], "Longitude of Observatory Location" ),
+				("LATITUDE", config.location["latitude"] , "Latitude of Observatory Location" ),
 				("MOUNTTYP", config.mount["mounttype"] , "Mount type" )
-				]
+				])
 
 			obj = self.communicator().stringToProxy("ApogeeCam%d:default -h %s -p %d" \
 				% ( config.camera[i]['uid'], \
 					config.nodesetting['camera']['ip'], \
 					config.nodesetting['camera']['port'] ))
 			cameras.append( HinOTORI.CameraPrx.checkedCast(obj) )
-			aptr.append(cameras[i].begin_Take(exposuretime,self.options.path+filename,True,header))
+			aptr.append(cameras[i].begin_Take(exposuretime,self.options.path+filename,True,header.tostring()))
 
 		for i in range(len(config.camera)):
 			if aptr[i] == None:
