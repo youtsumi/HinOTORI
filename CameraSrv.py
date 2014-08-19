@@ -25,7 +25,11 @@ class CameraServer(Ice.Application):
 		for i in range(camnum):
 			try:
 				cfg=filter(lambda x: x['serial']==int(cams[i].GetSerialNumber()), config.camera)[0]
+			except AttributeError:
+				print traceback.format_exc()
+				cfg=config.camera[i]
 			except:
+				print traceback.format_exc()
 				raise HinOTORI.Error("Camera may not have appropriate serial number or it is not included in configration file")
 			camera = Camera(cfg['uid'],cams[i])
 			adapter.add(camera, \

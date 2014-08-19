@@ -7,7 +7,7 @@ import config
 
 status = 0
 
-class CameraClient(Ice.Application):
+class TelescopeClient(Ice.Application):
 	def run(self,args):
 		self.args=args
 		self.shutdownOnInterrupt()
@@ -31,7 +31,7 @@ class CameraClient(Ice.Application):
 
 
 if __name__ == "__main__":
-	app = CameraClient()
+	app = TelescopeClient()
 	status = app.main(sys.argv)
 	sys.exit(status)
 

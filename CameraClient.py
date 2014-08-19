@@ -5,6 +5,8 @@ import HinOTORI
 from optparse import OptionParser
 import datetime
 import config
+import ephem
+import math
 
 status = 0
 
@@ -43,6 +45,8 @@ class CameraClient(Ice.Application):
 		mount=HinOTORI.MountPrx.checkedCast(obj)
 		self.ra = mount.GetRa()
 		self.dec = mount.GetDec()
+		self.az = mount.GetAz()
+		self.el = mount.GetEl()
 		print mount.GetRa(), mount.GetDec()
 
 	def CameraProcessor(self):
@@ -61,12 +65,23 @@ class CameraClient(Ice.Application):
 		for i in range(len(config.camera)):
 			filename = "object%s-%d.fits" \
 				% ( expdatetime.strftime("%Y%m%d%H%M%S"), config.camera[i]['uid'] )
+
 			header=[
-				("Focus","%lf" % self.z, "Focus position in mm"),
-				("RA","%lf" % self.ra, "Target position"),
-				("Dec","%lf" % self.dec, "Target position"),
+				("FOCUS","%lf" % self.z, "Focus position in mm"),
+				("RA-DEG","%lf" % (self.ra/math.pi*180.), "Target position"),
+				("DEC-DEG","%lf" % (self.dec/math.pi*180.), "Target position"),
+				("RA","%s" % ephem.hours(self.ra), "Target position"),
+				("DEC","%s" % ephem.degrees(self.dec), "Target position"),
+				("AZ","%lf" % self.az, "Target position"),
+				("EL","%lf" % self.el, "Target position"),
 				("UFNAME", filename, "Original filename" ),
-				("FILTER", config.camera[i]['filter'], "Filter name" )
+				("FILTER", config.camera[i]['filter'], "Filter name" ),
+				("INSTRUME", "HinOTORI" , "Hiroshima University Operated Tibet Optical Robotic Imager" ),
+				("OBSERVER", self.options.user , "Name of observers" ),
+				("OBJECT", self.options.objectname , "Name of target object" ),
+				("LONGITUD", "%lf" % config.location["longitude"], "Observatory Location" ),
+				("LATITUDE", "%lf" % config.location["latitude"] , "Observatory Location" ),
+				("MOUNTTYP", config.mount["mounttype"] , "Mount type" )
 				]
 
 			obj = self.communicator().stringToProxy("ApogeeCam%d:default -h %s -p %d" \
@@ -89,7 +104,12 @@ class CameraClient(Ice.Application):
 		parser.add_option("-z", "--focus-z", dest="focusz",
                   help="set focus z", metavar="FILE")
 		parser.add_option("-t", "--exp-t", dest="expt",
-                  help="set exp t", metavar="FILE")
+                  help="set expxposure time", metavar="FILE")
+		parser.add_option("-o", "--object", dest="objectname",
+                  help="set object", metavar="FILE")
+		parser.add_option("-u", "--observer", dest="user",
+                  help="set user", metavar="FILE",default="GOD")
+
 
 		(options, myargs) = parser.parse_args(args)
 		self.options = options

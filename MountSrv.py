@@ -14,7 +14,7 @@ class MountServer(Ice.Application):
                                         config.nodesetting["mount"]['port'] \
                                 ))
 
-                mount = Mount()
+                mount = KanataMount()
                 adapter.add(mount, self.communicator().stringToIdentity("Mount"))
 
                 adapter.activate()
@@ -39,6 +39,55 @@ class Mount(HinOTORI.Mount):
 
 	def Goto(self,current=None):
 		pass
+
+class KanataMount(HinOTORI.Mount):
+        def __init__(self):
+                HinOTORI.Mount.__init__(self)
+		os.system("/home/utsumi/kanata/a.out &")
+
+	def _getstatus(self):
+		import re
+		p=re.compile("TelPos_current")
+		fh=open(config.mount['status'])
+		pos=filter(lambda x: p.match(x) is not None, fh.readlines())
+		ra,dec,epoch=pos[0][16:-1].split("  ")
+		self.ra=ra[3:]
+		self.dec=dec[4:]
+
+		d1,az,d2,el=pos[1][16:-1].split("  ")
+		print az, el
+		self.az=az
+		self.el=el
+		fh.close()
+
+        def GetRa(self,current=None):
+		import ephem
+		self._getstatus()
+		return ephem.hours(self.ra)
+
+        def GetDec(self,current=None):
+		import ephem
+		self._getstatus()
+		return ephem.degrees(self.dec)
+
+        def GetAz(self,current=None):
+		self._getstatus()
+		return float(self.az)
+
+        def GetEl(self,current=None):
+		self._getstatus()
+		return float(self.el)
+
+	def SetRa(self,radeg,current=None):
+		pass
+
+	def SetDec(self,decdeg,current=None):
+		pass
+
+	def Goto(self,current=None):
+		pass
+
+
 
 if __name__ == "__main__":
         app = MountServer()
