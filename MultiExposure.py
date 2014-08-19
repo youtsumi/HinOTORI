@@ -27,6 +27,9 @@ def GetCamConnections( ):
 	# connect to the first camera
 	cams=map( lambda i: SetupDevice.CreateAndConnectCam( devices[i] ), range(len(devices)))
 
+	for cam in cams:
+		print cam.GetSerialNumber()
+
 	return cams
 
 def GetCamConnection( num ):

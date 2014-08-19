@@ -4,9 +4,9 @@ Ice.loadSlice("HinOTORI.ice")
 import HinOTORI
 from optparse import OptionParser
 import datetime
+import config
 
 status = 0
-camnum = 3
 
 class CameraClient(Ice.Application):
 	def run(self,args):
@@ -20,10 +20,14 @@ class CameraClient(Ice.Application):
 		"""
 		A class method to communicate with the telescope.
 		"""
-		obj = self.communicator().stringToProxy("telescope:default -h 192.168.0.40 -p 10001")
+		obj = self.communicator().stringToProxy("telescope:default -h %s -p %d" 
+				% ( \
+					config.nodesetting["telescope"]['ip'], \
+					config.nodesetting["telescope"]['port'] \
+				))
 		telescope=HinOTORI.TelescopePrx.checkedCast(obj)
 		if self.options.focusz!=None:
-			telescope.SetFocusZ(float(self.options.focusz)*10000)
+			telescope.SetFocusZ(float(self.options.focusz)*1000)
 		self.z=telescope.GetFocusZ()
 		print "Focus z = %lf [mm]" % self.z
 
@@ -31,7 +35,11 @@ class CameraClient(Ice.Application):
 		"""
 		A class method to communicate with the mount.
 		"""
-		obj = self.communicator().stringToProxy("Mount:default -p 10002")
+		obj = self.communicator().stringToProxy("Mount:default -h %s -p %d"
+				% ( \
+					config.nodesetting["mount"]['ip'], \
+					config.nodesetting["mount"]['port'] \
+				))
 		mount=HinOTORI.MountPrx.checkedCast(obj)
 		self.ra = mount.GetRa()
 		self.dec = mount.GetDec()
@@ -50,20 +58,26 @@ class CameraClient(Ice.Application):
 		else:
 			exposuretime = 1.0
 
-		for i in range(camnum):
-			filename = "object%s-%d.fits" % ( expdatetime.strftime("%Y%m%d%H%M%S"), i )
+		for i in range(len(config.camera)):
+			print config.camera[i]['filter']
+			filename = "object%s-%d.fits" \
+				% ( expdatetime.strftime("%Y%m%d%H%M%S"), config.camera[i]['uid'] )
 			header=[
 				("Focus","%lf" % self.z, "Focus position in mm"),
 				("RA","%lf" % self.ra, "Target position"),
 				("Dec","%lf" % self.dec, "Target position"),
-				("UFNAME", filename, "Original filename" )
+				("UFNAME", filename, "Original filename" ),
+				("FILTER", config.camera[i]['filter'], "Filter name" )
 				]
 
-			obj = self.communicator().stringToProxy("ApogeeCam%d:default -p 10000" % i)
+			obj = self.communicator().stringToProxy("ApogeeCam%d:default -h %s -p %d" \
+				% ( config.camera[i]['uid'], \
+					config.nodesetting['camera']['ip'], \
+					config.nodesetting['camera']['port'] ))
 			cameras.append( HinOTORI.CameraPrx.checkedCast(obj) )
 			aptr.append(cameras[i].begin_Take(exposuretime,filename,True,header))
 
-		for i in range(camnum):
+		for i in range(len(config.camera)):
 			if aptr[i] == None:
 				continue
 			cameras[i].end_Take(aptr[i])

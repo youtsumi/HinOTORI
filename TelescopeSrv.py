@@ -4,12 +4,17 @@ Ice.loadSlice("HinOTORI.ice")
 import HinOTORI
 import AllunaToolKit
 import time
+import config
 
 class TelescopeServer(Ice.Application):
 	def run(self,args):
 		self.shutdownOnInterrupt()	# make sure clean up
 		adapter = self.communicator().createObjectAdapterWithEndpoints(
-                        os.path.basename(__file__), "default -p 10001")
+                        os.path.basename(__file__), "default -h %s -p %d"
+				 % ( \
+                                        config.nodesetting["telescope"]['ip'], \
+                                        config.nodesetting["telescope"]['port'] \
+                                ))
 
 		telescope = Telescope()
 		adapter.add(telescope, self.communicator().stringToIdentity("telescope"))

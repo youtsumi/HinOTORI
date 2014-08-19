@@ -3,6 +3,7 @@ import sys, traceback, Ice, os
 Ice.loadSlice("HinOTORI.ice")
 import HinOTORI
 from optparse import OptionParser
+import config
 
 status = 0
 

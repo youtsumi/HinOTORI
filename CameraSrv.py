@@ -4,13 +4,17 @@ Ice.loadSlice("HinOTORI.ice")
 import HinOTORI
 import MultiExposure
 import time
+import config
 
-camnum=3
+camnum=len(config.camera)
+
 class CameraServer(Ice.Application):
 	def run(self,args):
 		self.shutdownOnInterrupt()	# make sure clean up
 		adapter = self.communicator().createObjectAdapterWithEndpoints(
-                        os.path.basename(__file__), "default -p 10000")
+                        os.path.basename(__file__), 
+			"default -h %s -p %d" % ( config.nodesetting['camera']['ip'], \
+						config.nodesetting['camera']['port']))
 
 		try:
 			cams=MultiExposure.GetCamConnections()
@@ -19,8 +23,9 @@ class CameraServer(Ice.Application):
 			print traceback.format_exc()
 
 		for i in range(camnum):
-			camera = Camera(i,cams[i])
-			adapter.add(camera, self.communicator().stringToIdentity("ApogeeCam%d" % i))
+			camera = Camera(config.camera[i]['uid'],cams[config.camera[i]['uid']])
+			adapter.add(camera, \
+				self.communicator().stringToIdentity("ApogeeCam%d" % config.camera[i]['uid']))
 
 		adapter.activate()
 		self.communicator().waitForShutdown()
@@ -62,7 +67,7 @@ if __name__ == "__main__":
 	app = CameraServer()
 	args = sys.argv
 	args.extend( [
-		"--Ice.ThreadPool.Server.Size=3"
+		"--Ice.ThreadPool.Server.Size=%d" % camnum
 		])
 	
 	status = app.main(sys.argv)

@@ -2,12 +2,17 @@
 import sys, traceback, Ice, os
 Ice.loadSlice("HinOTORI.ice")
 import HinOTORI
+import config
 
 class MountServer(Ice.Application):
         def run(self,args):
                 self.shutdownOnInterrupt()      # make sure clean up
                 adapter = self.communicator().createObjectAdapterWithEndpoints(
-                        os.path.basename(__file__), "default -p 10002")
+                        os.path.basename(__file__), "default -h %s -p %d"
+				 % ( \
+                                        config.nodesetting["mount"]['ip'], \
+                                        config.nodesetting["mount"]['port'] \
+                                ))
 
                 mount = Mount()
                 adapter.add(mount, self.communicator().stringToIdentity("Mount"))
