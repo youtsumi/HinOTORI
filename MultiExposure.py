@@ -124,8 +124,8 @@ def camprocess( camid, filename, exposeTime, extraheader ):
 		header.append((k,v,c))
 
 	if extraheader is not None:
-		for k, v, c in extraheader:
-			header.append((k,v,c))
+		extraheader.extend(header)
+		header=extraheader
 
 	pyfits.writeto( filename, data.reshape((row,col)), header=header )
 	print data.mean(), data.std()
