@@ -46,5 +46,6 @@ mount = {
 	'status': '/dev/shm/TELstatus'
 }
 
+### A directory to be stored
 import datetime
 targetdir = "/storage/HinOTORI/%s/" % datetime.date.today().strftime("%Y%m%d")
