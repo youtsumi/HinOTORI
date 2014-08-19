@@ -131,7 +131,7 @@ class Telescope:
         """Returns the current focuser's position"""
         self._MoveTab("Settings")
         self._MoveSettingTab("Focuser")
-        return float(self.app_form["TJvSpinEdit4"].GetProperties()["Texts"][0])/10000.
+        return float(self.app_form["TJvSpinEdit4"].GetProperties()["Texts"][0])/1000.
         
 
     def InspectClass(self):
