@@ -23,9 +23,13 @@ class CameraServer(Ice.Application):
 			print traceback.format_exc()
 
 		for i in range(camnum):
-			camera = Camera(config.camera[i]['uid'],cams[config.camera[i]['uid']])
+			try:
+				cfg=filter(lambda x: x['serial']==int(cams[i].GetSerialNumber()), config.camera)[0]
+			except:
+				raise HinOTORI.Error("Camera may not have appropriate serial number or it is not included in configration file")
+			camera = Camera(cfg['uid'],cams[cfg['uid']])
 			adapter.add(camera, \
-				self.communicator().stringToIdentity("ApogeeCam%d" % config.camera[i]['uid']))
+				self.communicator().stringToIdentity("ApogeeCam%d" % cfg['uid']))
 
 		adapter.activate()
 		self.communicator().waitForShutdown()
