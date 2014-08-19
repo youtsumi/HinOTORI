@@ -17,7 +17,12 @@ class TelescopeClient(Ice.Application):
 		"""
 		A class method to communicate with the telescope.
 		"""
-		obj = self.communicator().stringToProxy("telescope:default -h 192.168.0.40 -p 10001")
+		obj = self.communicator().stringToProxy("telescope:default -h %s -p %d"
+                         % ( \
+                                        config.nodesetting["mount"]['ip'], \
+                                        config.nodesetting["mount"]['port'] \
+                                ))
+
 		telescope=HinOTORI.TelescopePrx.checkedCast(obj)
 
 		if self.args[1] == "open":
