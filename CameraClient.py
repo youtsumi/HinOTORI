@@ -28,9 +28,11 @@ class CameraClient(Ice.Application):
 					config.nodesetting["telescope"]['port'] \
 				))
 		telescope=HinOTORI.TelescopePrx.checkedCast(obj)
-		if self.options.focusz!=None:
-			telescope.SetFocusZ(float(self.options.focusz)*1000)
+		print self.options.focusz
+		telescope.SetFocusZ(float(self.options.focusz)*1000)
 		self.z=telescope.GetFocusZ()
+		if self.z != float(self.options.focusz):
+			raise HinOTORI.Error("Telescope handling may be lost")
 		print "Focus z = %lf [mm]" % self.z
 
 	def MountProcessor(self):
@@ -57,10 +59,7 @@ class CameraClient(Ice.Application):
 		expdatetime = datetime.datetime.utcnow()
 		cameras = []
 		aptr = []	# array for an pointer to the asynchronous method invocation
-		if self.options.expt!=None:
-			exposuretime = float(self.options.expt)
-		else:
-			exposuretime = 1.0
+		exposuretime = float(self.options.expt)
 
 		for i in range(len(config.camera)):
 			filename = "object%s-%d.fits" \
@@ -102,11 +101,11 @@ class CameraClient(Ice.Application):
 		"""
 		parser = OptionParser()
 		parser.add_option("-z", "--focus-z", dest="focusz",
-                  help="set focus z", metavar="FILE")
+                  help="set focus z", metavar="FILE",default="22.0")
 		parser.add_option("-t", "--exp-t", dest="expt",
-                  help="set expxposure time", metavar="FILE")
+                  help="set expxposure time", metavar="FILE",default=1.0)
 		parser.add_option("-o", "--object", dest="objectname",
-                  help="set object", metavar="FILE")
+                  help="set object", metavar="FILE",default="TEST")
 		parser.add_option("-u", "--observer", dest="user",
                   help="set user", metavar="FILE",default="GOD")
 
