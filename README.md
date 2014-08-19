@@ -15,8 +15,9 @@ Requirement
 - Ice 3.5.1 with python2.7(32bit)
 - pywinauto -- This only supports 32bit python from my understanding. If it's wrong, you can go 64bit.
 - Alluna Telescope Control System 10.6
-- libapogee with a ``tweak''
+- libapogee with a ``tweak'' to support new AltaF camera
 - pyephem
+- gitpython
 
 Links
 -----
