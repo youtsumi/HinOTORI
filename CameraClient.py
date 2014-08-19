@@ -68,7 +68,7 @@ class CameraClient(Ice.Application):
 				% ( expdatetime.strftime("%Y%m%d%H%M%S"), config.camera[i]['uid'] )
 
 			header=pyfits.Header([
-				("FOC-POS", self.z, "Focus position in mm"),
+				("FOC-VAL", self.z, "Focus position in mm"),
 				("RA-DEG", (self.ra/math.pi*180.), "Target position in degree"),
 				("DEC-DEG", (self.dec/math.pi*180.), "Target position in degree"),
 				("RA","%s" % ephem.hours(self.ra), "Target position in hour angle"),
