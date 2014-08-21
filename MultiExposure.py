@@ -98,8 +98,8 @@ def camprocess( camid, filename, exposeTime, extraheader ):
 	cam.SetImageCount( count )
 	print "Starting %f sec light exposure" % (exposeTime) 
 	expdatetime = datetime.datetime.utcnow()
-#	cam.StartExposure( exposeTime, True )
-	cam.StartExposure( exposeTime, False )
+	cam.StartExposure( exposeTime, True )
+#	cam.StartExposure( exposeTime, False )
 			
 	status = None
 	while status != apg.Status_ImageReady:

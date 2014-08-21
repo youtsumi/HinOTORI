@@ -58,13 +58,15 @@ class KanataMount(HinOTORI.Mount):
 	def _getstatus(self):
 		import re
 		p=re.compile("TelPos_current")
+		s=re.compile("[\s]+")
 		fh=open(config.mount['status'])
 		pos=filter(lambda x: p.match(x) is not None, fh.readlines())
-		ra,dec,epoch=pos[0][16:-1].split("  ")
-		self.ra=ra[3:]
-		self.dec=dec[4:]
+		print s.split(pos[0][16:-1])
+		d1,ra,d2,dec,epoch=s.split(pos[0][16:-1])
+		self.ra=ra
+		self.dec=dec
 
-		d1,az,d2,el=pos[1][16:-1].split("  ")
+		d1,az,d2,el=s.split(pos[1][16:-1])
 		print az, el
 		self.az=az
 		self.el=el
