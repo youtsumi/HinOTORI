@@ -1,5 +1,6 @@
 ### This configuration file is written in python2 format
 ### Camera configuration
+### Note that the serial number should be written by user when one have new one
 camera=[
 	{
 		'serial': 131741,
@@ -42,8 +43,8 @@ location = {
 
 ### configuration for the mount
 mount = {
-#	'mounttype': 'KanataAzEl',
-	'mounttype': 'Simulator',
+	'mounttype': 'KanataAzEl',
+#	'mounttype': 'Simulator',
 	'status': '/dev/shm/TELstatus'
 }
 

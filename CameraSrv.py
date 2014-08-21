@@ -58,7 +58,7 @@ class Camera(HinOTORI.Camera):
 	def Take(self,expt,filename,shutter,fitsheader,current=None):
 		fitsheader=pyfits.Header.fromstring(fitsheader)
 		fitsheader.extend([ 
-			("GITHASH",self.hexsha,"A hash key of this software"),
+			("GITHASH",self.hexsha,"A Git hash key"),
 			("GITAUTHO",self.author,"Last commiter name"),
 		 ])
 		print repr(fitsheader)

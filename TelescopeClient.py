@@ -19,8 +19,8 @@ class TelescopeClient(Ice.Application):
 		"""
 		obj = self.communicator().stringToProxy("telescope:default -h %s -p %d"
                          % ( \
-                                        config.nodesetting["mount"]['ip'], \
-                                        config.nodesetting["mount"]['port'] \
+                                        config.nodesetting["telescope"]['ip'], \
+                                        config.nodesetting["telescope"]['port'] \
                                 ))
 
 		telescope=HinOTORI.TelescopePrx.checkedCast(obj)

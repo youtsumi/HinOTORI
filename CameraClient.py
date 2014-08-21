@@ -9,7 +9,6 @@ import ephem
 import math
 import pyfits
 
-status = 0
 
 class CameraClient(Ice.Application):
 	def run(self,args):
@@ -119,6 +118,7 @@ class CameraClient(Ice.Application):
 
 
 if __name__ == "__main__":
+	status = 0
 	app = CameraClient()
 	status = app.main(sys.argv)
 	sys.exit(status)

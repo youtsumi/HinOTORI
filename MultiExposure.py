@@ -117,15 +117,14 @@ def camprocess( camid, filename, exposeTime, extraheader ):
 	print "Saving image to file"
 	imgName = "object"
 
-	header = pyfits.Header(pyfits.Header(GetCameraInfo(cam)))
-	for k, v, c in [('DATE-OBS',	expdatetime.strftime("%Y-%m-%d"), 	"") ,
-			('UT',		expdatetime.strftime("%H:%M:%S"), 	""),
-			('EXPTIME',	exposeTime,				"Exposure Time") ]:
-		header.append((k,v,c))
+	header = pyfits.Header( [('DATE-OBS',	expdatetime.strftime("%Y-%m-%d"), 	"") ,
+				 ('UT',		expdatetime.strftime("%H:%M:%S"), 	""),
+				 ('EXPTIME',	exposeTime,				"Exposure Time") ] ) 
 
 	if extraheader is not None:
-		extraheader.extend(header)
-		header=extraheader
+		header.extend(extraheader)
+
+	header.extend(GetCameraInfo(cam))
 
 	pyfits.writeto( filename, data.reshape((row,col)), header=header )
 	print data.mean(), data.std()
