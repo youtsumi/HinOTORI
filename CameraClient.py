@@ -8,6 +8,8 @@ import config
 import ephem
 import math
 import pyfits
+import pywcs
+import numpy
 
 
 class CameraClient(Ice.Application):
@@ -51,11 +53,23 @@ class CameraClient(Ice.Application):
 		self.el = mount.GetEl()
 		print mount.GetRa(), mount.GetDec()
 
+	def _buildwcs(self):
+		wcs = pywcs.WCS(naxis=2)
+		wcs.wcs.crval = [self.ra/math.pi*180., self.dec/math.pi*180.]
+		wcs.wcs.crpix = [1024,1024]
+		wcs.wcs.cd = numpy.array([[-13.5e-6/4080e-3,0],[0,13.5e-6/4080e-3]])
+#		wcs.wcs.cdelt = numpy.array([-13.5e-6/4080e-3/math.pi*180.,13.5e-6/4080e-3/math.pi*180.])
+		wcs.rotateCD(self.az)
+		wcs.wcs.ctype = ["RA---TAN", "DEC--TAN"]
+		wcs.wcs.fix()
+		return wcs.to_header()
+
 	def CameraProcessor(self):
 		"""
 		A class method to communicate with the cameras
 		"""
-		os.system("mkdir -p %s" % self.options.path)
+		if os.path.exists(self.options.path)!=True:
+			os.system("mkdir -p %s" % self.options.path)
 
 		expdatetime = datetime.datetime.utcnow()
 		cameras = []
@@ -79,10 +93,13 @@ class CameraClient(Ice.Application):
 				("INSTRUME", "HinOTORI" , "Hiroshima University Operated Tibet Optical Robotic Imager" ),
 				("OBSERVER", self.options.user , "Name of observers" ),
 				("OBJECT", self.options.objectname , "Name of target object" ),
+				("OBSERVAT", config.location["observatory"], "Observatory" ),
 				("LONGITUD", config.location["longitude"], "Longitude of Observatory Location" ),
 				("LATITUDE", config.location["latitude"] , "Latitude of Observatory Location" ),
 				("MOUNTTYP", config.mount["mounttype"] , "Mount type" )
 				])
+
+			header.extend(self._buildwcs())
 
 			obj = self.communicator().stringToProxy("ApogeeCam%d:default -h %s -p %d" \
 				% ( config.camera[i]['uid'], \

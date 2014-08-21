@@ -37,6 +37,7 @@ nodesetting={
 
 ### Observatory location
 location = {
+	'observatory': "Higashi-Hiroshima Observatory",
 	'longitude': 132.7767,
 	'latitude': 34.3775
 }
