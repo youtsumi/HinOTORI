@@ -33,8 +33,6 @@ class CameraClient(Ice.Application):
 		print self.options.focusz
 		telescope.SetFocusZ(float(self.options.focusz))
 		self.z=telescope.GetFocusZ()
-		if self.z != float(self.options.focusz):
-			raise HinOTORI.Error("Telescope handling may be lost")
 		print "Focus z = %lf [mm]" % self.z
 
 	def MountProcessor(self):

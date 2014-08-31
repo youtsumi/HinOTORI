@@ -52,3 +52,6 @@ mount = {
 ### A directory to be stored
 import datetime
 targetdir = "/storage/HinOTORI/%s/" % datetime.date.today().strftime("%Y%m%d")
+
+### focuser conversion factor
+focusconv = 0.254e-3    # in mm/step
