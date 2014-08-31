@@ -12,6 +12,7 @@ import time
 
 pathtoapp = "C:\Program Files\ALLUNA Optics\Telescope Control System\TCS.exe"
 windowname = u'TCS V10.6T'
+focusconv = 0.254e-3	# in mm
 
 class Telescope:
     def __init__(self):
@@ -109,7 +110,7 @@ class Telescope:
         self._MoveTab("Focus")
         
         zpos=controls.win32_controls.EditWrapper(self.app_form["TJvSpinEdit17"])
-        zpos.SetText("%d" % int(target))
+        zpos.SetText("%d" % int(target/focusconv))
 
         gotobutton=controls.win32_controls.EditWrapper(self.app_form["GoToButton2"])
         gotobutton.Click()
@@ -131,7 +132,8 @@ class Telescope:
         """Returns the current focuser's position"""
         self._MoveTab("Settings")
         self._MoveSettingTab("Focuser")
-        return float(self.app_form["TJvSpinEdit4"].GetProperties()["Texts"][0])/1000.
+#        return float(self.app_form["TJvSpinEdit4"].GetProperties()["Texts"][0])/1000.
+        return float(self.app_form["TJvSpinEdit4"].GetProperties()["Texts"][0])*focusconv
         
 
     def InspectClass(self):

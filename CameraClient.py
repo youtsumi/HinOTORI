@@ -31,7 +31,7 @@ class CameraClient(Ice.Application):
 				))
 		telescope=HinOTORI.TelescopePrx.checkedCast(obj)
 		print self.options.focusz
-		telescope.SetFocusZ(float(self.options.focusz)*1000)
+		telescope.SetFocusZ(float(self.options.focusz))
 		self.z=telescope.GetFocusZ()
 		if self.z != float(self.options.focusz):
 			raise HinOTORI.Error("Telescope handling may be lost")
