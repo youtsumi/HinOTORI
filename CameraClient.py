@@ -88,6 +88,7 @@ class CameraClient(Ice.Application):
 				("EL", self.el, "Target position in degree"),
 				("UFNAME", filename, "Original filename" ),
 				("FILTER", config.camera[i]['filter'], "Filter name" ),
+				("GAIN", config.camera[i]['gain'], "Gain measured by the vendor" ),
 				("INSTRUME", "HinOTORI" , "Hiroshima University Operated Tibet Optical Robotic Imager" ),
 				("OBSERVER", self.options.user , "Name of observers" ),
 				("OBJECT", self.options.objectname , "Name of target object" ),

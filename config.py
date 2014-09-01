@@ -5,17 +5,20 @@ camera=[
 	{
 		'serial': 131741,
 		'filter': 'u',
-		'uid': 0
+		'uid': 0,
+		'gain': 1.7	# from the spec sheet
 	},
 	{
 		'serial': 121430,
 		'filter': 'Rc',
-		'uid':	1
+		'uid':	1,
+		'gain': 1.3
 	},
 	{
 		'serial': 121431,
 		'filter': 'Ic',
-		'uid': 2
+		'uid': 2,
+		'gain': 1.2
 	}
 ]
 
