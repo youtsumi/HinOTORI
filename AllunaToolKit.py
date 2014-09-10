@@ -12,7 +12,7 @@ import time
 import config
 
 pathtoapp = "C:\Program Files\ALLUNA Optics\Telescope Control System\TCS.exe"
-windowname = u'TCS V10.6T'
+windowname = u'TCS V11.0T'
 
 class Telescope:
     def __init__(self):
