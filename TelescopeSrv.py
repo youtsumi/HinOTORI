@@ -34,10 +34,10 @@ class Telescope(HinOTORI.Telescope,AllunaToolKit.Telescope):
 	def GetFocusZ(self,current=None):
 		self.z = self.FocusingPosition()
 		print "Telescope: z= %lf" % self.z
-		return self.z
+		return int(self.z/config.focusconv)
 
 	def SetFocusZ(self,targetz,current=None):
-		self.z=targetz
+		self.z=int(targetz/config.focusconv)
 		self.FocusingTargetPosition(self.z)
 
 	def OpenMirror(self,current=None):
