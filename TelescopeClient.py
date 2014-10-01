@@ -33,7 +33,7 @@ class TelescopeClient(Ice.Application):
 			telescope.CloseMirror()
 		elif self.args[1] == "focus":
 			telescope.SetFocusZ(int(self.args[2]))
-			telescope.GetFocusZ()
+			print telescope.GetFocusZ()
 
 		else:
 			print "no such command %s" % self.args[1]
