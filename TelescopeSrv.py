@@ -41,6 +41,7 @@ class Telescope(HinOTORI.Telescope,AllunaToolKit.Telescope):
 		self.z=int(targetz/config.focusconv)
 		self.FocusingTargetPosition(self.z)
 		if targetz != int(self.GetFocusZ()/config.focusconv):
+			print targetz,self.GetFocusZ()
 			raise HinOTORI.Error("Focus seems not to be right position")
 
 	def OpenMirror(self,current=None):
