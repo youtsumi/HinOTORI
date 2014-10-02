@@ -32,14 +32,18 @@ class Telescope(HinOTORI.Telescope,AllunaToolKit.Telescope):
 		self.FocusingHomePosition()
 
 	def __check(self):
-		try:
-			self.CheckAppStatus()
-		except:
-			traceback.print_exc()
-			print "Try to reconnect"
-			self.app.kill_()
-			self.Connect()
-			self.FocusingPosition()
+		for i in range(config.ntrial):
+		    try:
+			    self.CheckAppStatus()
+			    break # if success, go next
+		    except:
+			    if i == config.ntrial-1:
+				raise
+			    traceback.print_exc()
+			    print "Try to reconnect"
+			    self.app.kill_()
+			    self.Connect()
+			    self.FocusingPosition()
 
 	def GetFocusZ(self,current=None):
 		self.__check()
@@ -50,9 +54,14 @@ class Telescope(HinOTORI.Telescope,AllunaToolKit.Telescope):
 	def SetFocusZ(self,targetz,current=None):
 		self.__check()
 		self.z=int(targetz/config.focusconv)
-		self.FocusingTargetPosition(self.z)
-		if self.z != int(self.GetFocusZ()/config.focusconv):
-			raise HinOTORI.Error("Focus seems not to be right position")
+		for i in range(config.ntrial):
+		    self.FocusingTargetPosition(self.z)
+		    if self.z != int(self.GetFocusZ()/config.focusconv):
+			if i==config.ntrial-1:
+			    raise HinOTORI.Error("Focus seems not to be right position")
+			else:
+			    print "Focus seems not to be right position, try again"
+		    break
 
 	def OpenMirror(self,current=None):
 		self.__check()
