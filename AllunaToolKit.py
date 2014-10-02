@@ -29,7 +29,14 @@ class Telescope:
 
     def __del__(self):
         self.app.kill_()
-    
+
+    def __checkconnection(self):
+	if u"Connect" in self.buttonconnect.Texts():
+            print "Connecting to the telescope..."
+            self.buttonconnect.Click()
+        else:
+	    pass
+ 
     def Connect(self):
         """Try to connect to the TCS software"""
         try:
@@ -43,11 +50,8 @@ class Telescope:
         self.app_form = self.app[windowname]
         self.buttonconnect = controls.win32_controls.ButtonWrapper(self.app_form[u"Connect"])
         
-        if u"Connect" in self.buttonconnect.Texts():
-            print "Connecting to the telescope..."
-            self.buttonconnect.Click()
-        else:
-            print "Seems already connected"
+	self.__checkconnection()
+    
             
         print "Get tab content to handle tabs"        
         self.tabcontrol=controls.common_controls.TabControlWrapper(self.app_form[u"TTabControl"])
@@ -113,6 +117,7 @@ class Telescope:
         while self.buttonconnect.IsEnabled() != True:
             print "wait for 1 seconds"
             time.sleep(1)
+	    self.CheckAppStatus()
         
     def FocusingTargetPosition(self,target):
         """Try to make the focuser to be at desired position in terms of the counter"""
@@ -147,9 +152,11 @@ class Telescope:
         
 
     def InspectClass(self):
-        self._MoveTab("Focus")
+#        self._MoveTab("Focus")
         self._MoveTab("Climate")
         for i, child in enumerate(self.app_form.Children()):
+	    if child.IsVisible() is not True:
+		continue
             child.CaptureAsImage().save("%s%d.jpg" \
 		% (child.FriendlyClassName(),i) )
 
@@ -158,18 +165,20 @@ class Telescope:
 	try:
 	    t=threading.Timer(config.apptimeout,timerhandler)
 	    t.start()
-	    while self.buttonconnect.IsEnabled() != True:
-		print "wait for 1 seconds"
+	    while self.buttonconnect.IsVisible() != True:
 		self.app_form.TypeKeys("\e")
 		time.sleep(1)
 	    t.cancel()
+	    self.__checkconnection()
 
 	except AlarmException as e:
 	    self.app_form.TypeKeys("\e")
 	    raise e
 
-	except (controls.HwndWrapper.ControlNotEnabled, \
-		controls.HwndWrapper.ControlNotVisible) as e :
+	except controls.HwndWrapper.ControlNotEnabled as e :
+	    raise e
+
+	except controls.HwndWrapper.ControlNotVisible as e :
 	    raise e
 
 if __name__ == "__main__":
@@ -177,12 +186,13 @@ if __name__ == "__main__":
     try:
         telescope = Telescope()
         telescope.Connect()
+        telescope.InspectClass()
 #        print telescope.DustcoverStatus()
 #        telescope.DustcoverOpen()
 #        print telescope.DustcoverStatus()
 #        telescope.DustcoverClose()
-        telescope.FocusingTargetPosition(9884)
-        print telescope.FocusingPosition()
+#        telescope.FocusingTargetPosition(9884)
+#        print telescope.FocusingPosition()
         
     except:
         traceback.print_exc(file=sys.stdout)
