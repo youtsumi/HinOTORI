@@ -114,10 +114,13 @@ class Telescope:
 
     def _WaitCompletion(self):
         """Waits to completion of something to do"""
+	t=threading.Timer(60,timerhandler)
+	t.start()
         while self.buttonconnect.IsEnabled() != True:
             print "wait for 1 seconds"
             time.sleep(1)
 	    self.CheckAppStatus()
+	t.cancel()
         
     def FocusingTargetPosition(self,target):
         """Try to make the focuser to be at desired position in terms of the counter"""
