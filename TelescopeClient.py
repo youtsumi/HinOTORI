@@ -11,32 +11,37 @@ class TelescopeClient(Ice.Application):
 	def run(self,args):
 		self.args=args
 		self.shutdownOnInterrupt()
-		self.TelescopeProcessor()
+		return self.TelescopeProcessor()
 
 	def TelescopeProcessor(self):
 		"""
 		A class method to communicate with the telescope.
 		"""
-		obj = self.communicator().stringToProxy("telescope:default -h %s -p %d"
-                         % ( \
-                                        config.nodesetting["telescope"]['ip'], \
-                                        config.nodesetting["telescope"]['port'] \
-                                ))
+		try:
+			obj = self.communicator().stringToProxy("telescope:default -h %s -p %d"
+				 % ( \
+						config.nodesetting["telescope"]['ip'], \
+						config.nodesetting["telescope"]['port'] \
+					))
 
-		telescope=HinOTORI.TelescopePrx.checkedCast(obj)
+			telescope=HinOTORI.TelescopePrx.checkedCast(obj)
 
-		if self.args[1] == "open":
-			print "open"
-			telescope.OpenMirror()
-		elif self.args[1] == "close":
-			print "close"
-			telescope.CloseMirror()
-		elif self.args[1] == "focus":
-			telescope.SetFocusZ(float(self.args[2]))
-			print telescope.GetFocusZ()
+			if self.args[1] == "open":
+				print "open"
+				telescope.OpenMirror()
+			elif self.args[1] == "close":
+				print "close"
+				telescope.CloseMirror()
+			elif self.args[1] == "focus":
+				telescope.SetFocusZ(float(self.args[2]))
+				print telescope.GetFocusZ()
 
-		else:
-			print "no such command %s" % self.args[1]
+			else:
+				print "no such command %s" % self.args[1]
+
+			return 0
+		except:
+			raise
 
 
 if __name__ == "__main__":

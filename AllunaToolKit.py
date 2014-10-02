@@ -147,7 +147,7 @@ class Telescope:
         
 
     def InspectClass(self):
-        self._MoveTab("Focus")
+#        self._MoveTab("Focus")
         self._MoveTab("Climate")
         for i, child in enumerate(self.app_form.Children()):
             child.CaptureAsImage().save("%s%d.jpg" \
@@ -177,12 +177,13 @@ if __name__ == "__main__":
     try:
         telescope = Telescope()
         telescope.Connect()
+        telescope.InspectClass()
 #        print telescope.DustcoverStatus()
 #        telescope.DustcoverOpen()
 #        print telescope.DustcoverStatus()
 #        telescope.DustcoverClose()
-        telescope.FocusingTargetPosition(9884)
-        print telescope.FocusingPosition()
+#        telescope.FocusingTargetPosition(9884)
+#        print telescope.FocusingPosition()
         
     except:
         traceback.print_exc(file=sys.stdout)
