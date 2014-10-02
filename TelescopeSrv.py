@@ -31,21 +31,35 @@ class Telescope(HinOTORI.Telescope,AllunaToolKit.Telescope):
 		self.Connect()
 		self.FocusingHomePosition()
 
+	def __check(self):
+		try:
+			self.CheckAppStatus()
+		except:
+			traceback.print_exc()
+			print "Try to reconnect"
+			self.app.kill_()
+			self.Connect()
+			self.FocusingPosition()
+
 	def GetFocusZ(self,current=None):
+		self.__check()
 		self.z = self.FocusingPosition()
 		print "Telescope: z= %lf, %d" % (self.z, int(self.z/config.focusconv))
 		return self.z
 
 	def SetFocusZ(self,targetz,current=None):
+		self.__check()
 		self.z=int(targetz/config.focusconv)
 		self.FocusingTargetPosition(self.z)
 		if self.z != int(self.GetFocusZ()/config.focusconv):
 			raise HinOTORI.Error("Focus seems not to be right position")
 
 	def OpenMirror(self,current=None):
+		self.__check()
 		self.DustcoverOpen()
 
 	def CloseMirror(self,current=None):
+		self.__check()
 		self.DustcoverClose()
 
 

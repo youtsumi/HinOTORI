@@ -10,9 +10,18 @@ That is the reason to develop this script.
 from pywinauto import application, controls
 import time
 import config
+import threading
 
 pathtoapp = "C:\Program Files\ALLUNA Optics\Telescope Control System\TCS.exe"
 windowname = u'TCS V11.0T'
+
+class AlarmException(Exception):
+    def __init__(self,msg):
+	Exception.__init__(self,msg)
+    
+
+def timerhandler():
+    raise AlarmException("Maybe connection is lost")
 
 class Telescope:
     def __init__(self):
@@ -144,6 +153,24 @@ class Telescope:
             child.CaptureAsImage().save("%s%d.jpg" \
 		% (child.FriendlyClassName(),i) )
 
+    def CheckAppStatus(self):
+	"""ControlNotEnalbed or ControlNotVisible"""
+	try:
+	    t=threading.Timer(config.apptimeout,timerhandler)
+	    t.start()
+	    while self.buttonconnect.IsEnabled() != True:
+		print "wait for 1 seconds"
+		self.app_form.TypeKeys("\e")
+		time.sleep(1)
+	    t.cancel()
+
+	except AlarmException as e:
+	    self.app_form.TypeKeys("\e")
+	    raise e
+
+	except (controls.HwndWrapper.ControlNotEnabled, \
+		controls.HwndWrapper.ControlNotVisible) as e :
+	    raise e
 
 if __name__ == "__main__":
     import time, sys, traceback
