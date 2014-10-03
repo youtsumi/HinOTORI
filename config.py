@@ -60,3 +60,6 @@ targetdir = "/storage/HinOTORI/%s/" % datetime.date.today().strftime("%Y%m%d")
 focusconv = 0.254e-3    # in mm/step
 apptimeout = 20		# sec
 ntrial = 3		# sec
+
+### log config
+FORMAT = "%(asctime)-15s %(name)s:%(funcName)s %(process)s:%(thread)s -- %(message)s"

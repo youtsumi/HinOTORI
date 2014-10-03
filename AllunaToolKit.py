@@ -11,9 +11,13 @@ from pywinauto import application, controls
 import time
 import config
 import threading
+import logging
 
 pathtoapp = "C:\Program Files\ALLUNA Optics\Telescope Control System\TCS.exe"
 windowname = u'TCS V11.0T'
+
+logging.basicConfig(format=config.FORMAT, level=logging.INFO)
+logger=logging.getLogger(__name__)
 
 class AlarmException(Exception):
     def __init__(self,msg):
@@ -32,7 +36,7 @@ class Telescope:
 
     def __checkconnection(self):
 	if u"Connect" in self.buttonconnect.Texts():
-            print "Connecting to the telescope..."
+            logger.info("Connecting to the telescope...")
             self.buttonconnect.Click()
         else:
 	    pass
@@ -42,9 +46,9 @@ class Telescope:
         try:
             self.app = application.Application()
             self.app.connect_(path=pathtoapp)
-            print "TCS is already running... Try to fetch the handle."
+            logger.info("TCS is already running... Try to fetch the handle.")
         except application.ProcessNotFoundError:
-            print "Try to run TCS application"
+            logger.info("Try to run TCS application")
             self.app = application.Application.start(pathtoapp)
         
         self.app_form = self.app[windowname]
@@ -53,12 +57,12 @@ class Telescope:
 	self.__checkconnection()
     
             
-        print "Get tab content to handle tabs"        
+        logger.info("Get tab content to handle tabs")
         self.tabcontrol=controls.common_controls.TabControlWrapper(self.app_form[u"TTabControl"])
         self.tabdict = dict( \
             [ (self.tabcontrol.GetTabText(i), i) for i in range(self.tabcontrol.TabCount())])
 
-        print "Get tab content in Settings to handle tabs"        
+        logger.info("Get tab content in Settings to handle tabs")
         self._MoveTab("Settings") # need to move to get labels before do it
         self.settingstabcontrol=controls.common_controls.TabControlWrapper(self.app_form[u"TTabControl2"])
         self.settingstabdict = dict( \
@@ -70,7 +74,7 @@ class Telescope:
         """Internal method to handle the top-layere tabs"""
         if self.tabcontrol.GetSelectedTab() == self.tabdict[u"%s" % dst]:
             return
-        print "Then move to %s control tab" % dst
+        logger.info("Then move to %s control tab" % dst)
         self.tabcontrol.Select(self.tabdict[u"%s" % dst])
 
     def _MoveSettingTab(self,dst):
@@ -78,25 +82,25 @@ class Telescope:
         if self.settingstabcontrol.GetSelectedTab() \
 	    == self.settingstabdict[u"%s" % dst]:
             return
-        print "Then move to %s control tab" % dst
+        logger.info("Then move to %s control tab" % dst)
         self.settingstabcontrol.Select(self.settingstabdict[u"%s" % dst])
 
     def _DustcoverControl(self,cmd):
         """Internal method to control the mirror cover"""
         self._MoveTab("Dustcover")
 
-        print "Try to %s dust cover" % cmd
+        logger.info("Try to %s dust cover" % cmd)
         if cmd in self.DustcoverStatus():
-            print "Now %sing" % cmd
+            logger.info("Now %sing" % cmd)
             if self.app_form["Button2"].IsEnabled():
                 self.app_form["Button2"].Click()
                 while "Wait ..." in self.DustcoverStatus():
-                    print "Wait completion for 1 seconds."
+                    logger.info("Wait completion for 1 seconds.")
                     time.sleep(1)
             else:
-                print "Seems lost the handle to the telescope"
+                logger.error("Seems lost the handle to the telescope")
         else:
-            print "Seems already %sed" % cmd        
+            logger.info("Seems already %sed" % cmd)
 
     def DustcoverStatus(self):
         """Try to retrieve the mirror cover"""
@@ -114,13 +118,16 @@ class Telescope:
 
     def _WaitCompletion(self):
         """Waits to completion of something to do"""
-	t=threading.Timer(60,timerhandler)
-	t.start()
-        while self.buttonconnect.IsEnabled() != True:
-            print "wait for 1 seconds"
-            time.sleep(1)
-	    self.CheckAppStatus()
-	t.cancel()
+	try:
+	    t=threading.Timer(60,timerhandler)
+	    t.start()
+	    while self.buttonconnect.IsEnabled() != True:
+		logger.info("wait for 1 seconds")
+		time.sleep(1)
+		self.CheckAppStatus()
+	    t.cancel()
+	finally:
+	    del t
         
     def FocusingTargetPosition(self,target):
         """Try to make the focuser to be at desired position in terms of the counter"""
@@ -183,6 +190,9 @@ class Telescope:
 
 	except controls.HwndWrapper.ControlNotVisible as e :
 	    raise e
+
+	finally:
+	    del t
 
 if __name__ == "__main__":
     import time, sys, traceback
