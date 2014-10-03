@@ -39,7 +39,7 @@ class Telescope:
             logger.info("Connecting to the telescope...")
             self.buttonconnect.Click()
         else:
-	    pass
+            logger.debug("Already connected to the telescope...")
  
     def Connect(self):
         """Try to connect to the TCS software"""
@@ -55,7 +55,6 @@ class Telescope:
         self.buttonconnect = controls.win32_controls.ButtonWrapper(self.app_form[u"Connect"])
         
 	self.__checkconnection()
-    
             
         logger.info("Get tab content to handle tabs")
         self.tabcontrol=controls.common_controls.TabControlWrapper(self.app_form[u"TTabControl"])
@@ -95,7 +94,7 @@ class Telescope:
             if self.app_form["Button2"].IsEnabled():
                 self.app_form["Button2"].Click()
                 while "Wait ..." in self.DustcoverStatus():
-                    logger.info("Wait completion for 1 seconds.")
+                    logger.debug("Wait completion for 1 seconds.")
                     time.sleep(1)
             else:
                 logger.error("Seems lost the handle to the telescope")
@@ -119,13 +118,21 @@ class Telescope:
     def _WaitCompletion(self):
         """Waits to completion of something to do"""
 	try:
-	    t=threading.Timer(60,timerhandler)
+	    t=threading.Timer(config.apptimeout,timerhandler)
 	    t.start()
+	    logger.debug("a number of thread is %d" % threading.activeCount())
 	    while self.buttonconnect.IsEnabled() != True:
-		logger.info("wait for 1 seconds")
+		logger.debug("wait for 1 seconds")
 		time.sleep(1)
 		self.CheckAppStatus()
 	    t.cancel()
+
+	except:
+	    logger.error("Application may be not respond. Try to restart")
+	    self.app.kill_()
+	    time.sleep(3)
+	    self.Connect()
+
 	finally:
 	    del t
         
@@ -183,6 +190,9 @@ class Telescope:
 
 	except AlarmException as e:
 	    self.app_form.TypeKeys("\e")
+	    self.app.kill_()
+	    time.sleep(3)
+	    self.Connect()
 	    raise e
 
 	except controls.HwndWrapper.ControlNotEnabled as e :
