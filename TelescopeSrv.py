@@ -5,6 +5,10 @@ import HinOTORI
 import AllunaToolKit
 import time
 import config
+import logging
+
+logging.basicConfig(format=config.FORMAT, level=config.loglevel)
+logger=logging.getLogger(__name__)
 
 class TelescopeServer(Ice.Application):
 	def run(self,args):
@@ -39,8 +43,8 @@ class Telescope(HinOTORI.Telescope,AllunaToolKit.Telescope):
 		    except:
 			    if i == config.ntrial-1:
 				raise
-			    traceback.print_exc()
-			    print "Try to reconnect"
+			    logger.error(traceback.format_exc())
+			    logger.error("Try to reconnect")
 			    self.app.kill_()
 			    self.Connect()
 			    self.FocusingPosition()
@@ -48,7 +52,7 @@ class Telescope(HinOTORI.Telescope,AllunaToolKit.Telescope):
 	def GetFocusZ(self,current=None):
 		self.__check()
 		self.z = self.FocusingPosition()
-		print "Telescope: z= %lf, %d" % (self.z, int(self.z/config.focusconv))
+		logger.info("Telescope: z= %lf, %d" % (self.z, int(self.z/config.focusconv)))
 		return self.z
 
 	def SetFocusZ(self,targetz,current=None):
@@ -60,7 +64,7 @@ class Telescope(HinOTORI.Telescope,AllunaToolKit.Telescope):
 			if i==config.ntrial-1:
 			    raise HinOTORI.Error("Focus seems not to be right position")
 			else:
-			    print "Focus seems not to be right position, try again"
+			    logger.error("Focus seems not to be right position, try again")
 		    break
 
 	def OpenMirror(self,current=None):

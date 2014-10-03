@@ -16,7 +16,7 @@ import logging
 pathtoapp = "C:\Program Files\ALLUNA Optics\Telescope Control System\TCS.exe"
 windowname = u'TCS V11.0T'
 
-logging.basicConfig(format=config.FORMAT, level=logging.INFO)
+logging.basicConfig(format=config.FORMAT, level=config.loglevel)
 logger=logging.getLogger(__name__)
 
 class AlarmException(Exception):

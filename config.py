@@ -62,4 +62,6 @@ apptimeout = 20		# sec
 ntrial = 3		# sec
 
 ### log config
-FORMAT = "%(asctime)-15s %(name)s:%(funcName)s %(process)s:%(thread)s -- %(message)s"
+import logging
+FORMAT = "%(asctime)-15s[%(levelname)s] %(name)s:%(funcName)s %(process)s:%(thread)s -- %(message)s"
+loglevel = logging.INFO
