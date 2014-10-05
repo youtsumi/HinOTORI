@@ -142,6 +142,7 @@ class Telescope:
         self._MoveTab("Focus")
         
         zpos=controls.win32_controls.EditWrapper(self.app_form["TJvSpinEdit17"])
+ #       zpos.SetText("%d" % int(target/config.focusconv))
         zpos.SetText("%d" % target)
 
         gotobutton=controls.win32_controls.EditWrapper(self.app_form["GoToButton2"])
