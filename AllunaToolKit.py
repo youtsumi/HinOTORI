@@ -23,7 +23,6 @@ class AlarmException(Exception):
     def __init__(self,msg):
 	Exception.__init__(self,msg)
     
-
 def timerhandler():
     raise AlarmException("Maybe connection is lost")
 
@@ -120,14 +119,16 @@ class Telescope:
 	try:
 	    t=threading.Timer(config.apptimeout,timerhandler)
 	    t.start()
-	    logger.debug("a number of thread is %d" % threading.activeCount())
+	    nth=threading.activeCount()
+	    logger.debug("a number of thread is %d" % nth)
 	    while self.buttonconnect.IsEnabled() != True:
 		logger.debug("wait for 1 seconds")
 		time.sleep(1)
-		self.CheckAppStatus()
+		if nth!=threading.activeCount():
+		    raise AlarmException("Timeout")
 	    t.cancel()
 
-	except:
+	except AlarmException:
 	    logger.error("Application may be not respond. Try to restart")
 	    self.app.kill_()
 	    time.sleep(3)
@@ -141,7 +142,6 @@ class Telescope:
         self._MoveTab("Focus")
         
         zpos=controls.win32_controls.EditWrapper(self.app_form["TJvSpinEdit17"])
- #       zpos.SetText("%d" % int(target/config.focusconv))
         zpos.SetText("%d" % target)
 
         gotobutton=controls.win32_controls.EditWrapper(self.app_form["GoToButton2"])
@@ -182,9 +182,13 @@ class Telescope:
 	try:
 	    t=threading.Timer(config.apptimeout,timerhandler)
 	    t.start()
+	    nth=threading.activeCount()
+	    logger.debug("a number of thread is %d" % nth)
 	    while self.buttonconnect.IsVisible() != True:
 		self.app_form.TypeKeys("\e")
 		time.sleep(1)
+		if nth!=threading.activeCount():
+		    raise AlarmException("Timeout")
 	    t.cancel()
 	    self.__checkconnection()
 
