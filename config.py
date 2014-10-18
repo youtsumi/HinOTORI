@@ -58,5 +58,10 @@ targetdir = "/storage/HinOTORI/%s/" % datetime.datetime.utcnow().strftime("%Y%m%
 
 ### focuser conversion factor
 focusconv = 0.254e-3    # in mm/step
-apptimeout = 20		# sec
+apptimeout = 60		# sec
 ntrial = 3		# sec
+
+### log config
+import logging
+FORMAT = "%(asctime)-15s[%(levelname)s] %(name)s:%(funcName)s %(process)s:%(thread)s -- %(message)s"
+loglevel = logging.DEBUG
