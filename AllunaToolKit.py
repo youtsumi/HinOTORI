@@ -49,6 +49,7 @@ class Telescope:
         except application.ProcessNotFoundError:
             logger.info("Try to run TCS application")
             self.app = application.Application.start(pathtoapp)
+	    self._WaitCompletion()  # wait a completion of the initialization
         
         self.app_form = self.app[windowname]
         self.buttonconnect = controls.win32_controls.ButtonWrapper(self.app_form[u"Connect"])
