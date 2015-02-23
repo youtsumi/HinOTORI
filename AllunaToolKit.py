@@ -54,6 +54,7 @@ class Telescope:
         self.buttonconnect = controls.win32_controls.ButtonWrapper(self.app_form[u"Connect"])
         
 	self.__checkconnection()
+	self._WaitCompletion()  # wait a completion of the initialization
             
         logger.info("Get tab content to handle tabs")
         self.tabcontrol=controls.common_controls.TabControlWrapper(self.app_form[u"TTabControl"])
