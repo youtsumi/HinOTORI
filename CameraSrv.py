@@ -45,7 +45,7 @@ class Camera(HinOTORI.Camera):
 	def __init__(self,idnum,cam):
 		self.idnum = idnum
 		self.cam = cam
-		repo = git.Repo(os.path.basename(__file__))
+		repo = git.Repo(os.path.abspath(os.path.dirname(__file__))) 
 		headcommit = repo.head.commit
 		self.hexsha=headcommit.hexsha
 		self.author=headcommit.author.name

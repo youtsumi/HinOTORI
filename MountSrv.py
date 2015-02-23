@@ -53,7 +53,7 @@ class Mount(HinOTORI.Mount):
 class KanataMount(HinOTORI.Mount):
         def __init__(self):
                 HinOTORI.Mount.__init__(self)
-		os.system("/home/utsumi/kanata/a.out &")
+		os.system("/home/utsumi/src/kanata/a.out &")
 
 	def _getstatus(self):
 		import re
