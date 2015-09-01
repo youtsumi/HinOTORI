@@ -45,16 +45,17 @@ class Dome:
 #	    raise Exception("RS232C port is not avialable")
         
     def GetStatus(self):
-        self.InspectItem(u"RAStatic2")
-        self.InspectItem(u"DECStatic2")
-        self.InspectItem(u"Button9") # rotate auto
-        self.InspectItem(u"Button11") # slit close
-        self.InspectItem(u"Button12") # latch auto
-        self.InspectItem(u"アラーム１") # alarm 1
-        self.InspectItem(u"アラーム２") # alarm 2
-        self.InspectItem(u"アラーム３") # alarm 3
-        self.InspectItem(u"Static10") # target angle
-        self.InspectItem(u"Static13") # current angle
+	for item in  [ u"RAStatic2",
+			 u"DECStatic2",
+			 u"Button9", # rotate auto
+			 u"Button11", # slit close
+			 u"Button12", # latch auto
+			 u"アラーム１", # alarm 1
+			 u"アラーム２", # alarm 2
+			 u"アラーム３", # alarm 3
+			 u"Static10", # target angle
+			 u"Static13" ] : # current angle
+	    print item, self.CheckState(item)
 
     def SlitOpen(self):
 	logger.info("Try to open the dome slit")
@@ -66,12 +67,16 @@ class Dome:
 	button=self.app_form[u"Button2"] # left button for what? maybe slit close
 	button.Click()
 
-    def InspectClass(self):
-        for i, child in enumerate(self.app_form.Children()):
-	    if child.IsVisible() is not True:
-		continue
-            child.CaptureAsImage().save("%s-%d.jpg" \
-		% (child.FriendlyClassName(),i) )
+    def CheckState(self,item):
+	button=self.app_form[item]
+	for i, v in button.CaptureAsImage().getcolors():
+	    if v == ( 255, 0, 0 ) :
+		return False
+	    elif v == ( 0, 255, 0 ):
+		return True
+	    else:
+		pass
+	return None
 
     def InspectItem(self,item):
 #	self.app_form.PrintControlIdentifiers()
@@ -101,7 +106,6 @@ if __name__ == "__main__":
 	dome.SlitClose()
 	time.sleep(10)
 	exit(0)
-        dome.InspectClass()
         dome.InspectItem(u"Button1") # submit time
         dome.InspectItem(u"Button2") # left button for what? maybe slit close
         dome.InspectItem(u"Button3") # stop button maybe slit close
