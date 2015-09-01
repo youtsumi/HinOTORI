@@ -34,9 +34,10 @@ class Dome:
             self.app = application.Application.start(pathtoapp)
         
         self.app_form = self.app.window_(title_re=windowname)
-        if self.app.window_(title_re="RS232.+"):
-            logger.error("RS232C port is not avialable")
-        self.app.window_(title_re="RS232.+")["OK"].Click()
+#        print self.app.window_(title_re="RS232.+").isDialog()
+#        if self.app.window_(title_re="RS232.+"):
+#            logger.error("RS232C port is not avialable")
+#            self.app.window_(title_re="RS232.+")["OK"].Click()
 #        raise Exception("RS232C port is not avialable")
         
     def GetStatus(self):
