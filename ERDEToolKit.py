@@ -60,8 +60,13 @@ class Dome:
 		 u"Button12", # latch auto
 		    ]:
 	    button=self.app_form[item]
-	    if button.CaptureAsImage().getcolors() == (255,0,0):
-		button.Click()
+	    for i, v in button.CaptureAsImage().getcolors():
+		if v == ( 255, 0, 0 ) :
+		    button.Click()
+		elif v == ( 0, 255, 0 ):
+		    pass
+		else:
+		    pass
 
     def SlitOpen(self):
 	logger.info("Try to open the dome slit")
