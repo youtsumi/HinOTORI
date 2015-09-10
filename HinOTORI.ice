@@ -34,8 +34,8 @@ module HinOTORI {
 	};
 
 	interface Dome {
-		void SlitOpen( );
-		void SlitClose( );
+		void slitOpen( );
+		void slitClose( );
 		int CurrentDirection();
 		int TargetDirection();
 		bool Alarm1();

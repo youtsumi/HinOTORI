@@ -28,10 +28,11 @@ class DomeClient(Ice.Application):
 
 			if self.args[1] == "open":
 				print "open"
-				dome.SlitOpen()
+				dome.slitOpen()
+
 			elif self.args[1] == "close":
 				print "close"
-				dome.SlitClose()
+				dome.slitClose()
 
 			else:
 				print "no such command %s" % self.args[1]

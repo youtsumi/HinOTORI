@@ -18,7 +18,7 @@ grammer={
         "FB_SLIT_OPEN":             ( 3,  5,   0x1),
         "FB_SLIT_CLOSE":            ( 3,  6,   0x8),
         "FB_SLIT_STOP":             ( 3,  6,   0x4),
-        "FB_DOME_AUTO":           ( 3,  6,   0x2),
+        "FB_DOME_AUTO":             ( 3,  6,   0x2),
         "FB_SLIT_AUTO_CLOSE":       ( 3,  6,   0x1),
         "SLIT_OPENED":              ( 3,  7,   0x8),
         "SLIT_CLOSED":              ( 3,  7,   0x4),
@@ -105,6 +105,8 @@ def SocketManager( port, status, sendbuf):
 	    status.update(OneCommand(line[stx:etx+1]))
 	    stx=etx+1                
 
+#	logger.debug(status)
+
 	# clear buffer if the queue is too long
 	if len(msg)>1024:
 	    msg = ""
@@ -162,14 +164,16 @@ class DomeToolKit:
 	logger.info("SlitAutoCloseOff")
         self.__ToggleButton("FB_SLIT_AUTO_CLOSE",state)
 
-    def SlitOpen(self,state=True):
-        if self.status["DOME_OPENED"]==1:
+    def SlitOpen(self,state=False):
+    	"""Note that low (False) is active"""
+        if self.status["SLIT_OPENED"]==0:
             return
 	logger.info("SlitOpen")
         self.__ToggleButton("FB_SLIT_OPEN",state)
 
-    def SlitClose(self,state=True):
-        if self.status["DOME_CLOSED"]==1:
+    def SlitClose(self,state=False):
+    	"""Note that low (False) is active"""
+        if self.status["SLIT_CLOSED"]==0:
             return
 	logger.info("SlitClose")
         self.__ToggleButton("FB_SLIT_CLOSE",state)
