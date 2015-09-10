@@ -198,4 +198,3 @@ if __name__ == "__main__":
     Dome.SlitOpen()
     time.sleep(5)
 #    Dome.SlitClose()
-#    time.sleep(1000)
