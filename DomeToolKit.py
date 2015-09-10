@@ -5,6 +5,9 @@ import re
 from multiprocessing import Manager, Process
 import datetime
 import config
+import logging
+logging.basicConfig(format=config.FORMAT, level=config.loglevel)
+logger=logging.getLogger(__name__)
 
 length=22
 p=re.compile(r"FB_.*")
@@ -112,9 +115,8 @@ def SocketManager( port, status, sendbuf):
 	if len(sendbuf)==0:
 	    continue
 
-	print sendbuf
 	sendmsg=sendbuf.pop(0)
-	print "Send this message: ", sendmsg
+	logger.debug("Send this message: "+ sendmsg)
 	ser.write(sendmsg)
         
 class DomeToolKit:
@@ -141,35 +143,43 @@ class DomeToolKit:
             self.__com(PressButton(key))
 
     def SetDateTime(self):
+	logger.info("Set datetime")
 	self.sendbuf.append(":WR07%s#" % datetime.datetime.now().strftime("%y%m%d%H%M%S"))
 
     def SetTelescopeNumber(self,telescopenumber):
 	if telescopenumber < 0 or telescopenumber > 6:
 	    raise Exception("Invalid value is given for telescopenumber")
+	logger.info("Set telescope number as %d" telescopenumber)
 	self.sendbuf.append(":WR09%02d#" % int(telescopenumber) )
 
     def SetLatchTimer(self,latchtimer):
 	if latchtimer < 0 or latchtimer > 999:
 	    raise Exception("Invalid value is given for latchtimer")
+	logger.info("Set latchtimer as %d" latchtimer)
 	self.sendbuf.append(":WR0a%03d#" % int(latchtimer) )
 
     def SlitAutoCloseOff(self,state):
+	logger.info("SlitAutoCloseOff")
         self.__ToggleButton("FB_SLIT_AUTO_CLOSE",state)
 
     def SlitOpen(self,state=True):
         if self.status["DOME_OPENED"]==1:
             return
+	logger.info("SlitOpen")
         self.__ToggleButton("FB_SLIT_OPEN",state)
 
     def SlitClose(self,state=True):
         if self.status["DOME_CLOSED"]==1:
             return
+	logger.info("SlitClose")
         self.__ToggleButton("FB_SLIT_CLOSE",state)
 
     def DomeAuto(self,state):
+	logger.info("DomeAuto")
         self.__ToggleButton("FB_DOME_AUTO",state)
 
     def DomeLatchDisable(self,state):
+	logger.info("DomeLatchDisable")
         self.__ToggleButton("FB_LATCH",state)
 
 if __name__ == "__main__":
