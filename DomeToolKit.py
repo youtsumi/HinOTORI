@@ -3,6 +3,7 @@ import serial
 import time
 import re
 from multiprocessing import Manager, Process
+import datetime
 
 length=22
 p=re.compile(r"FB_.*")
@@ -50,6 +51,9 @@ grammer={
 
 def MakeNormalMessage( address ):
     return ":WR%02d"%address+"F"*14+"01#"
+
+def MakeDateTimeMessage( ):
+    return ":WR07%s#" % datetime.datetime.now().strftime("%y%m%d%H%M%S")
 
 def PressButton( key ):
     normal = MakeNormalMessage(3)
@@ -137,6 +141,9 @@ class DomeToolKit:
                 return
             self.__com(PressButton(key))
 
+    def SetDateTime(self):
+	self.sendbuf.append(MakeDateTimeMessage)
+
     def SlitAutoCloseOff(self,state):
         self.__ToggleButton("FB_SLIT_AUTO_CLOSE",state)
 
@@ -163,6 +170,7 @@ if __name__ == "__main__":
 ##    for i in range(1000):
 ##        time.sleep(0.5)
 ##        print "current: ", Dome.status
+    Dome.SetDateTime()
     time.sleep(2)
 #    print Dome.status["FB_SLIT_AUTO_CLOSE"]
 #    Dome.SlitAutoCloseOff(False)
