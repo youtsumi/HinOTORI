@@ -15,7 +15,7 @@ grammer={
         "FB_SLIT_OPEN":             ( 3,  5,   0x1),
         "FB_SLIT_CLOSE":            ( 3,  6,   0x8),
         "FB_SLIT_STOP":             ( 3,  6,   0x4),
-        "FB_DOME_MANUAL":           ( 3,  6,   0x2),
+        "FB_DOME_AUTO":           ( 3,  6,   0x2),
         "FB_SLIT_AUTO_CLOSE":       ( 3,  6,   0x1),
         "SLIT_OPENED":              ( 3,  7,   0x8),
         "SLIT_CLOSED":              ( 3,  7,   0x4),
@@ -166,8 +166,8 @@ class DomeToolKit:
             return
         self.__ToggleButton("FB_SLIT_CLOSE",state)
 
-    def DomeManual(self,state):
-        self.__ToggleButton("FB_DOME_MANUAL",state)
+    def DomeAuto(self,state):
+        self.__ToggleButton("FB_DOME_AUTO",state)
 
     def DomeLatchDisable(self,state):
         self.__ToggleButton("FB_LATCH",state)
@@ -196,11 +196,11 @@ if __name__ == "__main__":
 #    print Dome.status["FB_SLIT_AUTO_CLOSE"]
 #    time.sleep(5)
 #    time.sleep(5)
-#    Dome.DomeManual(True)
+#    Dome.DomeAuto(True)
 #    time.sleep(5)
-#    Dome.DomeManual(False)
+#    Dome.DomeAuto(False)
 #    time.sleep(5)
-#    Dome.DomeManual(True)
+#    Dome.DomeAuto(True)
 #    time.sleep(5)
 #    print Dome.status["FB_LATCH"]
 #    Dome.DomeLatchDisable(False)
