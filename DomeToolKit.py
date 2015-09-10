@@ -52,8 +52,6 @@ grammer={
 def MakeNormalMessage( address ):
     return ":WR%02d"%address+"F"*14+"01#"
 
-def MakeDateTimeMessage( ):
-    return ":WR07%s#" % datetime.datetime.now().strftime("%y%m%d%H%M%S")
 
 def PressButton( key ):
     normal = MakeNormalMessage(3)
@@ -142,7 +140,10 @@ class DomeToolKit:
             self.__com(PressButton(key))
 
     def SetDateTime(self):
-	self.sendbuf.append(MakeDateTimeMessage())
+	self.sendbuf.append(":WR07%s#" % datetime.datetime.now().strftime("%y%m%d%H%M%S"))
+
+    def SetLatchTimer(self,latchtimer):
+	self.sendbuf.append(":WR09%02d#" % latchtimer )
 
     def SlitAutoCloseOff(self,state):
         self.__ToggleButton("FB_SLIT_AUTO_CLOSE",state)
@@ -171,6 +172,7 @@ if __name__ == "__main__":
 ##        time.sleep(0.5)
 ##        print "current: ", Dome.status
     Dome.SetDateTime()
+    Dome.SetLatchTimer(60)
     time.sleep(2)
 #    print Dome.status["FB_SLIT_AUTO_CLOSE"]
 #    Dome.SlitAutoCloseOff(False)
