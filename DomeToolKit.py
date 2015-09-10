@@ -142,8 +142,15 @@ class DomeToolKit:
     def SetDateTime(self):
 	self.sendbuf.append(":WR07%s#" % datetime.datetime.now().strftime("%y%m%d%H%M%S"))
 
+    def SetTelescopeNumber(self,telescopenumber):
+	if telescopenumber < 0 or telescopenumber > 6:
+	    raise Exception("Invalid value is given for telescopenumber")
+	self.sendbuf.append(":WR09%03d#" % int(telescopenumber) )
+
     def SetLatchTimer(self,latchtimer):
-	self.sendbuf.append(":WR09%02d#" % latchtimer )
+	if latchtimer < 0 or latchtimer > 999:
+	    raise Exception("Invalid value is given for latchtimer")
+	self.sendbuf.append(":WR0a%03d#" % int(latchtimer) )
 
     def SlitAutoCloseOff(self,state):
         self.__ToggleButton("FB_SLIT_AUTO_CLOSE",state)
@@ -173,6 +180,7 @@ if __name__ == "__main__":
 ##        print "current: ", Dome.status
     Dome.SetDateTime()
     Dome.SetLatchTimer(60)
+    Dome.SetTelescopeNumber(5)
     time.sleep(2)
 #    print Dome.status["FB_SLIT_AUTO_CLOSE"]
 #    Dome.SlitAutoCloseOff(False)
