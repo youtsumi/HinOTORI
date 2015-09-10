@@ -44,12 +44,6 @@ class Dome(HinOTORI.Dome,DomeToolKit.DomeToolKit):
 		self.DomeAuto(False)
 		self.SlitAutoCloseOff(True)
 
-	def SlitOpen(self,current=None):
-		self.SlitOpen()
-
-	def SlitClose(self,current=None):
-		self.SlitClose()
-
 	def CurrentDirection(self,current=None):
 		return self.status["CURRENTDIR"]
 
