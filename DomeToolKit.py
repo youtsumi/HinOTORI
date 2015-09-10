@@ -114,7 +114,7 @@ def SocketManager( port, status, sendbuf):
 	print "Send this message: ", sendmsg
 	ser.write(sendmsg)
         
-class TRDCToolKit:
+class DomeToolKit:
     def __init__(self,port="COM6"):
         manager = Manager()
         self.status=manager.dict()
@@ -157,9 +157,9 @@ class TRDCToolKit:
         self.__ToggleButton("FB_LATCH",state)
 
 if __name__ == "__main__":
-#    Dome = TRDCToolKitSimulator()
+#    Dome = DomeToolKitSimulator()
 #    SocketReceiver({})
-    Dome = TRDCToolKit()
+    Dome = DomeToolKit()
 ##    for i in range(1000):
 ##        time.sleep(0.5)
 ##        print "current: ", Dome.status
