@@ -44,5 +44,5 @@ module HinOTORI {
 		bool isSlitOpened();
 		bool isSlitClosed();
 		bool isDomeOrigin();
-	}
+	};
 };
