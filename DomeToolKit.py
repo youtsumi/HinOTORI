@@ -149,13 +149,13 @@ class DomeToolKit:
     def SetTelescopeNumber(self,telescopenumber):
 	if telescopenumber < 0 or telescopenumber > 6:
 	    raise Exception("Invalid value is given for telescopenumber")
-	logger.info("Set telescope number as %d" telescopenumber)
+	logger.info("Set telescope number as %d" % telescopenumber)
 	self.sendbuf.append(":WR09%02d#" % int(telescopenumber) )
 
     def SetLatchTimer(self,latchtimer):
 	if latchtimer < 0 or latchtimer > 999:
 	    raise Exception("Invalid value is given for latchtimer")
-	logger.info("Set latchtimer as %d" latchtimer)
+	logger.info("Set latchtimer as %d" % latchtimer)
 	self.sendbuf.append(":WR0a%03d#" % int(latchtimer) )
 
     def SlitAutoCloseOff(self,state):
