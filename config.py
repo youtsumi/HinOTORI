@@ -36,6 +36,11 @@ nodesetting={
                 'ip': "192.168.0.248",
 		'port': 10001
 		}
+	'dome': {
+		'ip': "192.168.0.40",
+		'port': 10002
+		}
+
 }
 
 ### Observatory location
@@ -65,3 +70,6 @@ ntrial = 3		# sec
 import logging
 FORMAT = "%(asctime)-15s[%(levelname)s] %(name)s:%(funcName)s %(process)s:%(thread)s -- %(message)s"
 loglevel = logging.DEBUG
+
+### dome ###
+domeport = "COM6"

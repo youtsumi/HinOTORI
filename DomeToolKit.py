@@ -4,6 +4,7 @@ import time
 import re
 from multiprocessing import Manager, Process
 import datetime
+import config
 
 length=22
 p=re.compile(r"FB_.*")
@@ -16,8 +17,8 @@ grammer={
         "FB_SLIT_STOP":             ( 3,  6,   0x4),
         "FB_DOME_MANUAL":           ( 3,  6,   0x2),
         "FB_SLIT_AUTO_CLOSE":       ( 3,  6,   0x1),
-        "DOME_OPENED":              ( 3,  7,   0x8),
-        "DOME_CLOSED":              ( 3,  7,   0x4),
+        "SLIT_OPENED":              ( 3,  7,   0x8),
+        "SLIT_CLOSED":              ( 3,  7,   0x4),
         "ALARM1":                   ( 3,  7,   0x2),
         "ALARM2":                   ( 3,  7,   0x1),
         "ALARM3":                   ( 3,  8,   0x8),
@@ -117,11 +118,11 @@ def SocketManager( port, status, sendbuf):
 	ser.write(sendmsg)
         
 class DomeToolKit:
-    def __init__(self,port="COM6"):
+    def __init__(self,port):
         manager = Manager()
         self.status=manager.dict()
         self.sendbuf=manager.list()
-        self.p = Process(target=SocketManager, args=("COM6",self.status,self.sendbuf) )
+        self.p = Process(target=SocketManager, args=(port,self.status,self.sendbuf) )
 	self.p.daemon=True
         self.p.start()
 
@@ -174,7 +175,7 @@ class DomeToolKit:
 if __name__ == "__main__":
 #    Dome = DomeToolKitSimulator()
 #    SocketReceiver({})
-    Dome = DomeToolKit()
+    Dome = DomeToolKit(config.domeport)
 ##    for i in range(1000):
 ##        time.sleep(0.5)
 ##        print "current: ", Dome.status
