@@ -142,7 +142,7 @@ class DomeToolKit:
             self.__com(PressButton(key))
 
     def SetDateTime(self):
-	self.sendbuf.append(MakeDateTimeMessage)
+	self.sendbuf.append(MakeDateTimeMessage())
 
     def SlitAutoCloseOff(self,state):
         self.__ToggleButton("FB_SLIT_AUTO_CLOSE",state)
