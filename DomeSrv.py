@@ -57,10 +57,10 @@ class Dome(HinOTORI.Dome,DomeToolKit.DomeToolKit):
 		return self.status["TARGETDIR"]
 
 	def Alarm1(self,current=None):
-		return True if self.status["ALARM3"] == 1 else False
+		return True if self.status["ALARM1"] == 1 else False
 
 	def Alarm2(self,current=None):
-		return True if self.status["ALARM3"] == 1 else False
+		return True if self.status["ALARM2"] == 1 else False
 
 	def Alarm3(self,current=None):
 		return True if self.status["ALARM3"] == 1 else False
