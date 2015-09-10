@@ -145,7 +145,7 @@ class DomeToolKit:
     def SetTelescopeNumber(self,telescopenumber):
 	if telescopenumber < 0 or telescopenumber > 6:
 	    raise Exception("Invalid value is given for telescopenumber")
-	self.sendbuf.append(":WR09%03d#" % int(telescopenumber) )
+	self.sendbuf.append(":WR09%02d#" % int(telescopenumber) )
 
     def SetLatchTimer(self,latchtimer):
 	if latchtimer < 0 or latchtimer > 999:
