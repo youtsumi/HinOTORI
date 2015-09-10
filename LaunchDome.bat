@@ -13,6 +13,6 @@ rem Change the directory to the current directory.
 pushd %0\..
 cls
 
-python TelescopeSrv.py >> %0\..\Telescope%today_YYYYMMDD%.log 2>&1 &
+python DomeSrv.py >> %0\..\Dome%today_YYYYMMDD%.log 2>&1 &
 
 exit
