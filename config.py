@@ -35,7 +35,7 @@ nodesetting={
 	'telescope': {
                 'ip': "192.168.0.248",
 		'port': 10001
-		}
+		},
 	'dome': {
 		'ip': "192.168.0.40",
 		'port': 10002
