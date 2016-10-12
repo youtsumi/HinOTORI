@@ -12,7 +12,7 @@ module HinOTORI {
 			string header )
 			throws Error;
 		double GetTemperature(  );
-		void SetTemperature(  );
+		void SetTemperature( double setp );
 		void TurnOnCooler(  );
 	};
 
