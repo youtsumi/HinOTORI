@@ -7,24 +7,25 @@ camera=[
 		'filter': 'u',
 		'uid': 0,
 		'gain': 1.7	# from the spec sheet
-	},
-	{
-		'serial': 121430,
-		'filter': 'Rc',
-		'uid':	1,
-		'gain': 1.3
-	},
-	{
-		'serial': 121431,
-		'filter': 'Ic',
-		'uid': 2,
-		'gain': 1.2
 	}
+#	{
+#		'serial': 121430,
+#		'filter': 'Rc',
+#		'uid':	1,
+#		'gain': 1.3
+#	},
+#	{
+#		'serial': 121431,
+#		'filter': 'Ic',
+#		'uid': 2,
+#		'gain': 1.2
+#	}
 ]
 
 ### Server configuration
 nodesetting={
 	'camera': { 
+#		'ip': "192.168.0.38",
 		'ip': "127.0.0.1",
 		'port': 10000
 		},
@@ -33,28 +34,32 @@ nodesetting={
 		'port': 10002
 		},
 	'telescope': {
-		'ip': "192.168.0.40",
+		'ip': "192.168.0.118",
 		'port': 10001
 		}
 }
 
 ### Observatory location
 location = {
-	'observatory': "Higashi-Hiroshima Observatory",
-	'longitude': 132.7767,
-	'latitude': 34.3775
+	'observatory': "Ali Observatory",
+	'longitude': 80.030018,
+	'latitude':32.31373 
 }
 
 ### configuration for the mount
 mount = {
 #	'mounttype': 'KanataAzEl',
-	'mounttype': 'Simulator',
-	'status': '/dev/shm/TELstatus'
+#	'mounttype': 'Simulator',
+	'mounttype': 'HinOTORI',
+	'status': '/dev/shm/TELstatus',
+	'ip': '192.168.1.106',
+	'port': 4676,
+	't_point.txt': 't_point.txt'
 }
 
 ### A directory to be stored
 import datetime
-targetdir = "/storage/HinOTORI/%s/" % datetime.datetime.utcnow().strftime("%Y%m%d") 
+targetdir = "/home/utsumi/data/%s/" % datetime.datetime.utcnow().strftime("%Y%m%d") 
 
 ### focuser conversion factor
 focusconv = 0.254e-3    # in mm/step
