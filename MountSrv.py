@@ -16,6 +16,8 @@ class MountServer(Ice.Application):
 
 		if config.mount["mounttype"] == "KanataAzEl":
 			mount = KanataMount()
+		elif config.mount["mounttype"] == "HinOTORI":
+			mount = HinOTORIMount()
 		else:
 			mount = Mount()
 
@@ -49,6 +51,40 @@ class Mount(HinOTORI.Mount):
 
 	def Goto(self,current=None):
 		pass
+
+class HinOTORIMount(HinOTORI.Mount):
+        def __init__(self):
+		import mount
+		focusmodel=mount.FocusModel(0.,0.,0.,0.,0.,mount.FocusModel.TWO_LINES)
+		weatherstatus="./log/log.$date.txt"     # need to define before passing below methods
+		weatherstatusfile= "./weather.out"
+		telstatus="./log/telescope_$date.status"
+		rainstatusfile="./rain.out"
+		status= mount.TelescopeStatus(telstatus,rainstatusfile)
+		weather=mount.WeatherStatus(weatherstatus, weatherstatusfile )
+		self.mount=mount.Telescope(config.mount["ip"],config.mount["port"],config.mount["t_point.txt"],status,weather,focusmodel,mount.Telescope.AUTO)
+                HinOTORI.Mount.__init__(self)
+
+        def GetRa(self,current=None):
+		return self.mount.getRA()
+
+        def GetDec(self,current=None):
+		return self.mount.getDec()
+
+        def GetAz(self,current=None):
+		return self.mount.getAz()
+
+        def GetEl(self,current=None):
+		return self.mount.getElv()
+
+	def SetRa(self,radeg,current=None):
+		self.radeg=radeg
+
+	def SetDec(self,decdeg,current=None):
+		self.decdeg=decdeg
+
+	def Goto(self,current=None):
+		return self.mount.slew(self.radeg,self.self.radeg)
 
 class KanataMount(HinOTORI.Mount):
         def __init__(self):
