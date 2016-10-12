@@ -132,10 +132,18 @@ class CameraClient(Ice.Application):
 		(options, myargs) = parser.parse_args(args)
 		self.options = options
 
+class CameraClientWithoutTelescope(CameraClient):
+	def __init__(self):
+		self.z=0.0
+		CameraClient.__init__(self)
+
+	def TelescopeProcessor(self):
+		print "set exposure time"
 
 if __name__ == "__main__":
 	status = 0
-	app = CameraClient()
+	#app = CameraClient()
+	app = CameraClientWithoutTelescope()
 	status = app.main(sys.argv)
 	sys.exit(status)
 
