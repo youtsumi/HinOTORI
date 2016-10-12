@@ -26,6 +26,7 @@ class CameraServer(Ice.Application):
 
 		for i in range(camnum):
 			try:
+				print int(cams[i].GetSerialNumber())
 				cfg=filter(lambda x: x['serial']==int(cams[i].GetSerialNumber()), config.camera)[0]
 			except AttributeError:
 				print traceback.format_exc()
@@ -78,8 +79,13 @@ class Camera(HinOTORI.Camera):
 			_cb.ice_exception(HinOTORI.Error(traceback.format_exc()))
 
 	def GetTemperature(self,current=None):
-		print "GetTemperature[%d]: " % self.idnum
-		return 0.
+		print "GetTemperature[%d]: %lf" % (self.idnum, self.cam.GetTempCcd())
+		return self.cam.GetTempCcd()
+
+	def SetTemperature(self,setp,current=None):
+		print "Trying to set temperature[%d] to %lf" % (self.idnum, setp)
+		self.cam.SetCoolerSetPoint( setp )
+		
 
 if __name__ == "__main__":
 	app = CameraServer()
