@@ -71,11 +71,11 @@ def GetCameraInfo( obj ):
 			logging.debug("%s: %s" % ( method, ret ) )
 			ccdinfo.append((re.sub(wildcard, "", method),ret))
 		except TypeError as e:
-			logging.warn(traceback.format_exc())
+			logging.debug(traceback.format_exc())
 		except RuntimeError as e:
-			logging.warn(traceback.format_exc())
+			logging.debug(traceback.format_exc())
 		except ValueError as e:
-			logging.warn(traceback.format_exc())
+			logging.debug(traceback.format_exc())
 		except:
 			raise
 
