@@ -25,12 +25,15 @@ module HinOTORI {
 
 	interface Mount { 
 		double GetRa(  );
+		double GetCmdRa(  );
 		double GetDec(  );
+		double GetCmdDec(  );
 		double GetAz(  );
 		double GetEl(  );
 		void SetRa( double radeg );
 		void SetDec( double decdeg );
 		void Goto( );
+		void Move( double da, double dd );
 	};
 
 	interface Dome {

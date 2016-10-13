@@ -47,17 +47,20 @@ class CameraClient(Ice.Application):
 		mount=HinOTORI.MountPrx.checkedCast(obj)
 		self.ra = mount.GetRa()
 		self.dec = mount.GetDec()
+		self.cmdra = mount.GetCmdRa()
+		self.cmddec= mount.GetCmdDec()
 		self.az = mount.GetAz()
 		self.el = mount.GetEl()
 		print mount.GetRa(), mount.GetDec()
 
 	def _buildwcs(self):
 		wcs = pywcs.WCS(naxis=2)
-		wcs.wcs.crval = [self.ra/math.pi*180., self.dec/math.pi*180.]
+		wcs.wcs.crval = [self.ra, self.dec]
 		wcs.wcs.crpix = [1024,1024]
-		wcs.wcs.cd = numpy.array([[-13.5e-6/4080e-3,0],[0,13.5e-6/4080e-3]])
+#		wcs.wcs.cd = numpy.array([[-13.5e-6/4080e-3,0],[0,13.5e-6/4080e-3]])
+		wcs.wcs.cd = numpy.array([[-0.67/3600,0],[0,0.67/3600]])
 #		wcs.wcs.cdelt = numpy.array([-13.5e-6/4080e-3/math.pi*180.,13.5e-6/4080e-3/math.pi*180.])
-		wcs.rotateCD(self.az)
+#		wcs.rotateCD(self.az)
 		wcs.wcs.ctype = ["RA---TAN", "DEC--TAN"]
 		wcs.wcs.fix()
 		return wcs.to_header()
@@ -80,10 +83,13 @@ class CameraClient(Ice.Application):
 
 			header=pyfits.Header([
 				("FOC-VAL", self.z, "Focus position in mm"),
-				("RA-DEG", (self.ra/math.pi*180.), "Target position in degree"),
-				("DEC-DEG", (self.dec/math.pi*180.), "Target position in degree"),
-				("RA","%s" % ephem.hours(self.ra), "Target position in hour angle"),
-				("DEC","%s" % ephem.degrees(self.dec), "Target position"),
+				("RA-DEG", (self.ra), "Equatorial mount direction in degree"),
+				("DEC-DEG", (self.dec), "Equatorial mount direction in degree"),
+				("CRA-DEG", (self.cmdra), "Comannded Target position in degree"),
+				("CDE-DEG", (self.cmddec), "Comannded Target position in degree"),
+
+				("RA","%s" % ephem.hours(self.ra/180.*math.pi), "Target position in hour angle"),
+				("DEC","%s" % ephem.degrees(self.dec/180.*math.pi), "Target position"),
 				("AZ", self.az, "Target position in degree"),
 				("EL", self.el, "Target position in degree"),
 				("UFNAME", filename, "Original filename" ),
@@ -118,7 +124,7 @@ class CameraClient(Ice.Application):
 		"""
 		parser = OptionParser()
 		parser.add_option("-z", "--focus-z", dest="focusz",
-                  help="set focus z", metavar="FILE",default="22.0")
+                  help="set focus z", metavar="FILE",default="3.80")
 		parser.add_option("-t", "--exp-t", dest="expt",
                   help="set expxposure time", metavar="FILE",default=1.0)
 		parser.add_option("-o", "--object", dest="objectname",

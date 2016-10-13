@@ -65,10 +65,18 @@ class HinOTORIMount(HinOTORI.Mount):
 		weather=mount.WeatherStatus(weatherstatus, weatherstatusfile )
 		####
 		self.mount=mount.Telescope(config.mount["ip"],config.mount["port"],config.mount["t_point.txt"],status,weather,focusmodel,mount.Telescope.AUTO)
+		self.ra = self.GetRa()
+		self.dec= self.GetDec()
                 HinOTORI.Mount.__init__(self)
 
         def GetRa(self,current=None):
 		return self.mount.getRA()
+
+	def GetCmdRa( self, current=None ):
+		return self.ra
+
+	def GetCmdDec( self, current=None ):
+		return self.dec
 
         def GetDec(self,current=None):
 		return self.mount.getDec()
@@ -86,7 +94,12 @@ class HinOTORIMount(HinOTORI.Mount):
 		self.decdeg=decdeg
 
 	def Goto(self,current=None):
-		return self.mount.slew(self.radeg,self.self.radeg)
+		self.mount.slew(self.radeg,self.self.radeg)
+		return 0
+
+	def Move(self,da,dd,current=None):
+		# in arcsec
+		return self.mount.move(da,dd)
 
 class KanataMount(HinOTORI.Mount):
         def __init__(self):
