@@ -32,4 +32,17 @@ module HinOTORI {
 		void SetDec( double decdeg );
 		void Goto( );
 	};
+
+	interface Dome {
+		void slitOpen( );
+		void slitClose( );
+		int CurrentDirection();
+		int TargetDirection();
+		bool Alarm1();
+		bool Alarm2();
+		bool Alarm3();
+		bool isSlitOpened();
+		bool isSlitClosed();
+		bool isDomeOrigin();
+	};
 };

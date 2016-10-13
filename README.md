@@ -18,6 +18,10 @@ Requirement
 - libapogee with a ``tweak'' to support new AltaF camera
 - pyephem
 - gitpython
+- numpy
+- qhull
+- tar
+- python-tesseract
 
 Links
 -----
