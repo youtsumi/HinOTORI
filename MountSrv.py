@@ -55,16 +55,7 @@ class Mount(HinOTORI.Mount):
 class HinOTORIMount(HinOTORI.Mount):
         def __init__(self):
 		import mount
-		focusmodel=mount.FocusModel(0.,0.,0.,0.,0.,mount.FocusModel.TWO_LINES)
-		#### THE BELOW DEFINITION NO LONGER AVAILABLE BECAUSE IT IS FOR PREVIOUS MODEL ####
-		weatherstatus="./log/log.$date.txt"     # need to define before passing below methods
-		weatherstatusfile= "./weather.out"
-		telstatus="./log/telescope_$date.status"
-		rainstatusfile="./rain.out"
-		status= mount.TelescopeStatus(telstatus,rainstatusfile)
-		weather=mount.WeatherStatus(weatherstatus, weatherstatusfile )
-		####
-		self.mount=mount.Telescope(config.mount["ip"],config.mount["port"],config.mount["t_point.txt"],status,weather,focusmodel,mount.Telescope.AUTO)
+		self.mount=mount.Telescope(config.mount["ip"],config.mount["port"],config.mount["t_point.txt"],None,None,None,mount.Telescope.AUTO)
 		self.ra = self.GetRa()
 		self.dec= self.GetDec()
                 HinOTORI.Mount.__init__(self)
