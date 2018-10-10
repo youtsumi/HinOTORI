@@ -32,7 +32,7 @@ class Dome(HinOTORI.Dome,DomeToolKit.DomeToolKit):
 		HinOTORI.Dome.__init__(self)
 		DomeToolKit.DomeToolKit.__init__(self,config.domeport)
 		self.SetDateTime()
-		self.SetLatchTimer(10)
+		self.SetLatchTimer(30)
 		self.SetTelescopeNumber(1)
 		time.sleep(5)
 		self.DomeLatchDisable(False)
