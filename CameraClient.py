@@ -133,12 +133,11 @@ class CameraClient(Ice.Application):
                   help="set user", metavar="FILE",default="GOD")
 		parser.add_option("-p", "--path", dest="path",
                   help="set target dir", metavar="FILE",default=config.targetdir)
-		parser.add_option("-d", "--dark", dest="shutter", action="store_true",
-                  default = False, help="set target dir", )
-
+		parser.add_option("-d", "--dark", dest="shutter", action="store_false",
+                  default = True, help="set target dir", )
 
 		(options, myargs) = parser.parse_args(args)
-		if options.shutter:
+		if options.shutter is False:
 		 	options.objectname = "DARK"
 		self.options = options
 
