@@ -54,7 +54,7 @@ class Camera(HinOTORI.Camera):
 
 	def __del__(self):
 		if self.cam is not None:
-			self.cam.closeConnection()
+			self.cam.CloseConnection()
 
 	def Take(self,expt,filename,shutter,fitsheader,current=None):
 		fitsheader=pyfits.Header.fromstring(fitsheader)
