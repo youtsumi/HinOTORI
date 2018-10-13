@@ -65,7 +65,7 @@ class Camera(HinOTORI.Camera):
 		print repr(fitsheader)
 		print "Take %lf" % expt
 		if self.cam is not None:
-			MultiExposure.camprocess(self.cam,filename,expt,fitsheader)
+			MultiExposure.camprocess(self.cam,filename,expt,fitsheader,shutter)
 		else:
 			time.sleep(expt)
 		print "finish"

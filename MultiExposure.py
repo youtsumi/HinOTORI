@@ -82,7 +82,7 @@ def GetCameraInfo( obj ):
 	return ccdinfo
 
 
-def camprocess( camid, filename, exposeTime, extraheader ):
+def camprocess( camid, filename, exposeTime, extraheader, shutter ):
 #	print caminfo
 #	(cam, camid) = caminfo
 	cam = camid
@@ -98,7 +98,7 @@ def camprocess( camid, filename, exposeTime, extraheader ):
 	cam.SetImageCount( count )
 	print "Starting %f sec light exposure" % (exposeTime) 
 	expdatetime = datetime.datetime.utcnow()
-	cam.StartExposure( exposeTime, True )
+	cam.StartExposure( exposeTime, shutter )
 #	cam.StartExposure( exposeTime, False )
 			
 	status = None
