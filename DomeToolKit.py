@@ -182,8 +182,8 @@ class DomeToolKit:
 	logger.info("DomeAuto")
         self.__ToggleButton("FB_DOME_AUTO",state)
 
-    def DomeLatchDisable(self,state):
-	logger.info("DomeLatchDisable")
+    def DomeLatchEnable(self,state):
+	logger.info("DomeLatchEnable")
         self.__ToggleButton("FB_LATCH",state)
 
 if __name__ == "__main__":

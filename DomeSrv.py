@@ -35,12 +35,12 @@ class Dome(HinOTORI.Dome,DomeToolKit.DomeToolKit):
 		self.SetLatchTimer(30)
 		self.SetTelescopeNumber(1)
 		time.sleep(5)
-		self.DomeLatchDisable(False)
+		self.DomeLatchEnable(True)
 		self.DomeAuto(True)
 		self.SlitAutoCloseOff(False)
 
 	def __del__(self):
-		self.DomeLatchDisable(True)
+		self.DomeLatchEnable(False)
 		self.DomeAuto(False)
 		self.SlitAutoCloseOff(True)
 
