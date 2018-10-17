@@ -109,9 +109,12 @@ def camprocess( camid, filename, exposeTime, extraheader, shutter ):
 	cam.StartExposure( exposeTime, shutter )
 #	cam.StartExposure( exposeTime, False )
 			
+
+	time.sleep( exposeTime )
 	status = None
 	while status != apg.Status_ImageReady:
 	    status = cam.GetImagingStatus()	
+	    logging.info("cam.GetImagingStatus() = " + status)
 	    if( apg.Status_ConnectionError == status or
 		apg.Status_DataError == status or
 		apg.Status_PatternError == status ):
