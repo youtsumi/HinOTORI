@@ -100,11 +100,11 @@ def camprocess( camid, filename, exposeTime, extraheader, shutter ):
 #	col = cam.GetMaxImgCols()
 	col = cam.GetMaxImgCols() + cam.GetNumOverscanCols()
 	cam.SetRoiNumCols(cam.GetMaxImgCols() + cam.GetNumOverscanCols())
-	print "Imaging rows = %d, columns = %d" % ( row, col )
+	logging.info("Imaging rows = %d, columns = %d" % ( row, col ))
 
 	count = 1
 	cam.SetImageCount( count )
-	print "Starting %f sec light exposure" % (exposeTime) 
+	logging.info("Starting %f sec light exposure" % (exposeTime) )
 	expdatetime = datetime.datetime.utcnow()
 	cam.StartExposure( exposeTime, shutter )
 #	cam.StartExposure( exposeTime, False )
@@ -119,10 +119,10 @@ def camprocess( camid, filename, exposeTime, extraheader, shutter ):
 		raise RuntimeError( msg )
 	    time.sleep(1)
 		
-	print "Getting image"
+	logging.info("Getting image")
 	data = cam.GetImage()
 
-	print "Saving image to file: %s" % ( filename )
+	logging.info("Saving image to file: %s" % ( filename ))
 	imgName = "object"
 
 	header = pyfits.Header( [('DATE-OBS',	expdatetime.strftime("%Y-%m-%d"), 	"") ,
@@ -135,8 +135,8 @@ def camprocess( camid, filename, exposeTime, extraheader, shutter ):
 	header.extend(GetCameraInfo(cam))
 
 	pyfits.writeto( filename, data.reshape((row,col)), header=header )
-	print data.mean(), data.std()
-						
+	logging.info( "mean and std = %lf, %lf" % ( data.mean(), data.std() ))
+
 
 if __name__ == "__main__":
 	logging.basicConfig(level=logging.DEBUG,
