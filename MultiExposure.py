@@ -122,7 +122,7 @@ def camprocess( camid, filename, exposeTime, extraheader, shutter ):
 	print "Getting image"
 	data = cam.GetImage()
 
-	print "Saving image to file"
+	print "Saving image to file: %s" % ( filename )
 	imgName = "object"
 
 	header = pyfits.Header( [('DATE-OBS',	expdatetime.strftime("%Y-%m-%d"), 	"") ,
