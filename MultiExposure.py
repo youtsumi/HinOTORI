@@ -59,6 +59,14 @@ def GetCameraInfo( obj ):
 		"GetStatus", # contains duplicated infomation
 		"GetStatusStr", # contains duplicated infomation
 		"GetUsbFirmwareVersion", # 
+		"GetMacAddress", # 
+		"GetUsbVendorInfo", # 
+		"GetAdcGain", # 
+		"GetAdcOffset", # 
+		"GetSerialBaudRate", # 
+		"GetSerialFlowControl", # 
+		"GetSerialParity", # 
+		"GetUsbVendorInfo", # 
 		]
 	wildcard=r"(^Get)|(^Is)"
 	p=re.compile(wildcard)
