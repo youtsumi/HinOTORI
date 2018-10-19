@@ -33,7 +33,7 @@ class MountClient(Ice.Application):
 			print "Telescope will be moved to %lf %lf" % ( ra, dec )
 			mount.SetRa(ra)
 			mount.SetDec(dec)
-#			mount.Goto(dec)
+			mount.Goto()
 
 		except:
 			coord=SkyCoord(mount.GetRa(), mount.GetDec(),unit=u.degree)

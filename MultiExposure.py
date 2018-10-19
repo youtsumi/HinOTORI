@@ -59,6 +59,14 @@ def GetCameraInfo( obj ):
 		"GetStatus", # contains duplicated infomation
 		"GetStatusStr", # contains duplicated infomation
 		"GetUsbFirmwareVersion", # 
+		"GetMacAddress", # 
+		"GetUsbVendorInfo", # 
+		"GetAdcGain", # 
+		"GetAdcOffset", # 
+		"GetSerialBaudRate", # 
+		"GetSerialFlowControl", # 
+		"GetSerialParity", # 
+		"GetUsbVendorInfo", # 
 		]
 	wildcard=r"(^Get)|(^Is)"
 	p=re.compile(wildcard)
@@ -71,18 +79,18 @@ def GetCameraInfo( obj ):
 			logging.debug("%s: %s" % ( method, ret ) )
 			ccdinfo.append((re.sub(wildcard, "", method),ret))
 		except TypeError as e:
-			logging.debug(traceback.format_exc())
+			logging.warn(traceback.format_exc())
 		except RuntimeError as e:
-			logging.debug(traceback.format_exc())
+			logging.warn(traceback.format_exc())
 		except ValueError as e:
-			logging.debug(traceback.format_exc())
+			logging.warn(traceback.format_exc())
 		except:
 			raise
 
 	return ccdinfo
 
 
-def camprocess( camid, filename, exposeTime, extraheader ):
+def camprocess( camid, filename, exposeTime, extraheader, shutter ):
 #	print caminfo
 #	(cam, camid) = caminfo
 	cam = camid
@@ -92,18 +100,21 @@ def camprocess( camid, filename, exposeTime, extraheader ):
 #	col = cam.GetMaxImgCols()
 	col = cam.GetMaxImgCols() + cam.GetNumOverscanCols()
 	cam.SetRoiNumCols(cam.GetMaxImgCols() + cam.GetNumOverscanCols())
-	print "Imaging rows = %d, columns = %d" % ( row, col )
+	logging.info("Imaging rows = %d, columns = %d" % ( row, col ))
 
 	count = 1
 	cam.SetImageCount( count )
-	print "Starting %f sec light exposure" % (exposeTime) 
+	logging.info("Starting %f sec light exposure" % (exposeTime) )
 	expdatetime = datetime.datetime.utcnow()
-	cam.StartExposure( exposeTime, True )
+	cam.StartExposure( exposeTime, shutter )
 #	cam.StartExposure( exposeTime, False )
 			
+
+	time.sleep( exposeTime )
 	status = None
 	while status != apg.Status_ImageReady:
 	    status = cam.GetImagingStatus()	
+	    logging.info("cam.GetImagingStatus() = %d " % status)
 	    if( apg.Status_ConnectionError == status or
 		apg.Status_DataError == status or
 		apg.Status_PatternError == status ):
@@ -111,10 +122,10 @@ def camprocess( camid, filename, exposeTime, extraheader ):
 		raise RuntimeError( msg )
 	    time.sleep(1)
 		
-	print "Getting image"
+	logging.info("Getting image")
 	data = cam.GetImage()
 
-	print "Saving image to file"
+	logging.info("Saving image to file: %s" % ( filename ))
 	imgName = "object"
 
 	header = pyfits.Header( [('DATE-OBS',	expdatetime.strftime("%Y-%m-%d"), 	"") ,
@@ -127,8 +138,8 @@ def camprocess( camid, filename, exposeTime, extraheader ):
 	header.extend(GetCameraInfo(cam))
 
 	pyfits.writeto( filename, data.reshape((row,col)), header=header )
-	print data.mean(), data.std()
-						
+	logging.info( "mean and std = %lf, %lf" % ( data.mean(), data.std() ))
+
 
 if __name__ == "__main__":
 	logging.basicConfig(level=logging.DEBUG,

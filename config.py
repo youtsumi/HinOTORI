@@ -7,19 +7,19 @@ camera=[
 		'filter': 'u',
 		'uid': 0,
 		'gain': 1.7	# from the spec sheet
+	},
+	{
+		'serial': 121431,
+		'filter': 'Rc',
+		'uid':	1,
+		'gain': 1.3
+	},
+	{
+		'serial': 121430,
+		'filter': 'Ic',
+		'uid': 2,
+		'gain': 1.50
 	}
-#	{
-#		'serial': 121430,
-#		'filter': 'Rc',
-#		'uid':	1,
-#		'gain': 1.3
-#	},
-#	{
-#		'serial': 121431,
-#		'filter': 'Ic',
-#		'uid': 2,
-#		'gain': 1.2
-#	}
 ]
 
 ### Server configuration
@@ -30,16 +30,24 @@ nodesetting={
 		'port': 10000
 		},
 	'mount' : {
+#		'ip': "124.31.254.16",
 		'ip': "127.0.0.1",
 		'port': 10002
 		},
 	'telescope': {
-                'ip': "192.168.0.248",
+#                'ip': "192.168.0.248",
+                'ip': "192.168.154.1",
+#		'ip': "124.31.254.16",
+#		'ip': "127.0.0.1",
 		'port': 10001
+#		'port': 51111
 		},
 	'dome': {
-                'ip': "192.168.0.248",
-                'port': 10002      
+#                'ip': "192.168.1.116",
+#		'ip': "124.31.254.16",
+		'ip': "192.168.154.1",
+#		'ip': "127.0.0.1",
+                'port': 10003      
 		}
 
 }
@@ -57,14 +65,20 @@ mount = {
 #	'mounttype': 'Simulator',
 	'mounttype': 'HinOTORI',
 	'status': '/dev/shm/TELstatus',
-	'ip': '192.168.1.106',
+#	'ip': '192.168.1.116',
+#	'ip': '124.31.254.16',
+	'ip': '192.168.154.1',
 	'port': 4676,
 	't_point.txt': 't_point.txt'
 }
 
 ### A directory to be stored
-import datetime
-targetdir = "/home/utsumi/data/%s/" % datetime.datetime.utcnow().strftime("%Y%m%d") 
+import datetime,os
+if os.path.isdir("/mnt/disk1/data/"):
+	targetdir = "/mnt/disk1/data/%s/" % datetime.datetime.utcnow().strftime("%Y%m%d")
+else:
+	targetdir = "/home/utsumi/data/%s/" % datetime.datetime.utcnow().strftime("%Y%m%d") 
+
 
 ### focuser conversion factor
 focusconv = 0.254e-3    # in mm/step
@@ -77,4 +91,4 @@ FORMAT = "%(asctime)-15s[%(levelname)s] %(name)s:%(funcName)s %(process)s:%(thre
 loglevel = logging.DEBUG
 
 ### dome ###
-domeport = "COM6"
+domeport = "COM2"
