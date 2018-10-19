@@ -85,7 +85,7 @@ class HinOTORIMount(HinOTORI.Mount):
 		self.decdeg=decdeg
 
 	def Goto(self,current=None):
-		self.mount.slew(self.radeg,self.self.radeg)
+		self.mount.slew(self.radeg,self.decdeg)
 		return 0
 
 	def Move(self,da,dd,current=None):
