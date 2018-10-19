@@ -114,7 +114,7 @@ def camprocess( camid, filename, exposeTime, extraheader, shutter ):
 	status = None
 	while status != apg.Status_ImageReady:
 	    status = cam.GetImagingStatus()	
-	    logging.info("cam.GetImagingStatus() = %d " % status)
+	    logging.info("cam.GetImagingStatus() = %d" % status)
 	    if( apg.Status_ConnectionError == status or
 		apg.Status_DataError == status or
 		apg.Status_PatternError == status ):
