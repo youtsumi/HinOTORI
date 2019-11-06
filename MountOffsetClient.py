@@ -28,18 +28,24 @@ class MountClient(Ice.Application):
 		mount=HinOTORI.MountPrx.checkedCast(obj)
 
 		try:
-			ra=self.options.ra[0]
-			dec=self.options.dec[0]
-			print "Telescope will be moved to %lf %lf" % ( ra, dec )
-			mount.SetRa(ra)
-			mount.SetDec(dec)
-			mount.Goto()
+			ra=self.options.coordinate[0]
+			dec=self.options.coordinate[1]
+			dra=self.options.offset[0]
+			ddec=self.options.offset[1]
+			if ra != None or dec != None:
+				print("Telescope will be moved to %lf %lf" % ( ra, dec ))
+				mount.SetRa(ra)
+				mount.SetDec(dec)
+				mount.Goto()
+			if dra != 0 or ddec != 0:
+				print("Offset %lf %lf" % ( dra, ddec ))
+				mount.Move(dra,ddec)
 
 		except:
 			coord=SkyCoord(mount.GetRa(), mount.GetDec(),unit=u.degree)
-			print "Current telescope position in instrument coordinate"
-			print coord.ra.degree, coord.dec.degree
-			print coord.to_string("hmsdms")
+			print("Current telescope position in instrument coordinate")
+			print(coord.ra.degree, coord.dec.degree)
+			print(coord.to_string("hmsdms"))
 			return
 
 	def parseoptions(self,args):
@@ -48,10 +54,10 @@ class MountClient(Ice.Application):
 		"""
 
 		parser = argparse.ArgumentParser(description='HinOTORI mount controller')
-		parser.add_argument('ra', metavar='ra', type=float, nargs=1,
-				    help='specify a coordinate to be visited')
-		parser.add_argument('dec', metavar='dec', type=float, nargs=1,
-				    help='specify a coordinate to be visited')
+		parser.add_argument('-c','--coordinate', dest='coordinate', type=float, nargs=2, 
+				    default = [None, None],help='specify a coordinate to be visited')
+		parser.add_argument("--offset", dest="offset", type=float, 
+				    default = [0,0], nargs=2, help="dithering offset in arcsec")
 
 		try:
 			options = parser.parse_args(args[1:])
@@ -63,6 +69,6 @@ class MountClient(Ice.Application):
 if __name__ == "__main__":
 	app = MountClient()
 	status = app.main(sys.argv)
-	#os.system("IsTelReady.py")
+	#os.system("IsTelReadly.py")
 	sys.exit(status)
 

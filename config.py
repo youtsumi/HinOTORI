@@ -27,7 +27,7 @@ nodesetting={
 	'camera': { 
 #		'ip': "192.168.0.38",
 		'ip': "127.0.0.1",
-		'port': 10000
+		'port': 10009
 		},
 	'mount' : {
 #		'ip': "124.31.254.16",
@@ -74,11 +74,20 @@ mount = {
 
 ### A directory to be stored
 import datetime,os
-if os.path.isdir("/mnt/disk1/data/"):
-	targetdir = "/mnt/disk1/data/%s/" % datetime.datetime.utcnow().strftime("%Y%m%d")
+#DATADIR = "/mnt/disk1/data/"
+DATADIR = "/home/utsumi/Data/"
+DATE    = datetime.datetime.utcnow().strftime("%Y%m%d") + "/"
+if os.path.isdir(DATADIR):
+	targetdir = os.path.join(DATADIR,DATE)
 else:
-	targetdir = "/home/utsumi/data/%s/" % datetime.datetime.utcnow().strftime("%Y%m%d") 
+	targetdir = os.path.join("/home/utsumi/data/",DATE)
 
+### Stored Number of Obtained Data Frame
+EXPFile = os.path.join(DATADIR,"CurrentEXPID")
+FrameNCol = 7
+
+### Stored Today's observational infomation
+ObsFile = os.path.join(DATADIR,"CurrentObsInfo")
 
 ### focuser conversion factor
 focusconv = 0.254e-3    # in mm/step
