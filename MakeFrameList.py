@@ -2,6 +2,7 @@
 from astropy.io import fits as pf
 from astropy.time import Time
 import sys,os,glob
+import numpy as np
 sys.path.append("/home/utsumi/bin")
 import config
 import argparse
@@ -61,19 +62,16 @@ args = parser.parse_args()
 
 if __name__ == '__main__':
     import glob
-    import pandas as pd
     currentdir = ChangeDir(args.directory)
-    LIST   = glob.glob("*-?.fits")
+    LIST   = sorted(glob.glob("*-?.fits"))
     Column = ["EXPID","FRAMEID","MODE","EXPTIME","FILTER","RA","DEC","OBJECT","CDITH","NDITH","MJD","MEAN","MEDIAN","STD","MAX"]
-    aa     = {}
+    aa     = [Column]
     for F1 in LIST:
-        aa[F1] = Header(F1)
+        aa.append(Header(F1))
 
     outf = "header.log"
-    data = pd.DataFrame(aa,index=Column).T
-    data = data.sort_values('MJD', ascending=False)
-    data = data.sort_index()
-    data.to_csv(outf,sep="\t")
+    data = np.array(aa)
+    np.savetxt(outf,data,delimitr="\t",fmt="$s")
     currentdir = ChangeDir(currentdir)
     print("Saved log file is : \n%s" % os.path.join(currentdir, outf))
 
