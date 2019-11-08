@@ -51,28 +51,28 @@ class Dome(HinOTORI.Dome,DomeToolKit.DomeToolKit):
 		self.SlitClose()
 
 	def CurrentDirection(self,current=None):
-		return self.status["CURRENTDIR"]
+		return int(self.status["CURRENTDIR"])
 
 	def TargetDirection(self,current=None):
-		return self.status["TARGETDIR"]
+		return int(self.status["TARGETDIR"])
 
 	def Alarm1(self,current=None):
-		return True if self.status["ALARM1"] == 1 else False
+		return True if int(self.status["ALARM1"]) == 1 else False
 
 	def Alarm2(self,current=None):
-		return True if self.status["ALARM2"] == 1 else False
+		return True if int(self.status["ALARM2"]) == 1 else False
 
 	def Alarm3(self,current=None):
-		return True if self.status["ALARM3"] == 1 else False
+		return True if int(self.status["ALARM3"]) == 1 else False
 
 	def isSlitOpened(self,current=None):
-		return True if self.status["SLIT_OPENED"] == 1 else False
+		return True if int(self.status["SLIT_OPENED"]) == 1 else False
 
 	def isSlitClosed(self,current=None):
-		return True if self.status["SLIT_CLOSED"] == 1 else False
+		return True if int(self.status["SLIT_CLOSED"]) == 1 else False
 
 	def isDomeOrigin(self,current=None):
-		return True if self.status["ORIGIN"] == 1 else False
+		return True if int(self.status["ORIGIN"]) == 1 else False
 
 if __name__ == "__main__":
 	app = DomeServer()
