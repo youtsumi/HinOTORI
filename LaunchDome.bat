@@ -13,6 +13,6 @@ rem Change the directory to the current directory.
 pushd %0\..
 cls
 
-python DomeSrv.py >> %0\..\Dome%today_YYYYMMDD%.log 2>&1 &
+python DomeSrv.py --Ice.Trace.Network=3 >> %0\..\DomeLog\Dome%today_YYYYMMDD%.log 2>&1 &
 
 exit

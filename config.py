@@ -9,52 +9,65 @@ camera=[
 		'gain': 1.7	# from the spec sheet
 	},
 	{
-		'serial': 121430,
+		'serial': 121431,
 		'filter': 'Rc',
 		'uid':	1,
 		'gain': 1.3
 	},
 	{
-		'serial': 121431,
+		'serial': 121430,
 		'filter': 'Ic',
 		'uid': 2,
-		'gain': 1.2
+		'gain': 1.50
 	}
 ]
 
 ### Server configuration
 nodesetting={
 	'camera': { 
-		'ip': "127.0.0.1",
+#		'ip': "127.0.0.1",
+		'ip': "192.168.154.2",
 		'port': 10000
 		},
 	'mount' : {
-		'ip': "127.0.0.1",
+#		'ip': "127.0.0.1",
+		'ip': "192.168.154.2",
 		'port': 10002
 		},
 	'telescope': {
-                'ip': "192.168.0.248",
+#                'ip': "192.168.0.118",
+#                'ip': "127.0.0.1",
+                'ip': "192.168.154.1",
+#                'ip': "124.31.254.18",
 		'port': 10001
+#		'port': 51111
 		},
 	'dome': {
-                'ip': "192.168.0.248",
-                'port': 10002      
+#                'ip': "192.168.0.248",
+#                'ip': "127.0.0.1",
+                'ip': "192.168.154.1",
+#                'ip': "124.31.254.18",
+                'port': 10003      
 		}
 
 }
 
 ### Observatory location
 location = {
-	'observatory': "Higashi-Hiroshima Observatory",
-	'longitude': 132.7767,
-	'latitude': 34.3775
+	'observatory': "Ali Observatory",
+	'longitude':80.030018 ,
+	'latitude': 32.31373
 }
 
 ### configuration for the mount
 mount = {
 #	'mounttype': 'KanataAzEl',
-	'mounttype': 'Simulator',
-	'status': '/dev/shm/TELstatus'
+#	'mounttype': 'Simulator',
+	'mounttype': 'HinOTORI',
+	'status': '/dev/shm/TELstatus',
+	'ip': '192.168.154.1',
+	'port': 4676,
+	't_point.txt': 't_point.txt'
 }
 
 ### A directory to be stored
@@ -72,4 +85,4 @@ FORMAT = "%(asctime)-15s[%(levelname)s] %(name)s:%(funcName)s %(process)s:%(thre
 loglevel = logging.DEBUG
 
 ### dome ###
-domeport = "COM6"
+domeport = "COM2"

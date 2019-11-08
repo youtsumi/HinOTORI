@@ -85,6 +85,14 @@ def OneCommand(line):
 
 def SocketManager( port, status, sendbuf):
     ser=serial.Serial(port,38400,timeout=0,parity=serial.PARITY_ODD, stopbits=1)
+    ser.flushInput()
+    ser.flushOutput()
+
+#    for older pyserial
+#    ser.reset_input_buffer() 
+#    ser.reset_output_buffer()
+    
+    time.sleep(1)
     msg=""
     while True:
 	msg+=ser.read(100)
@@ -105,7 +113,7 @@ def SocketManager( port, status, sendbuf):
 	    status.update(OneCommand(line[stx:etx+1]))
 	    stx=etx+1                
 
-#	logger.debug(status)
+	logger.debug(status)
 
 	# clear buffer if the queue is too long
 	if len(msg)>1024:
@@ -182,8 +190,8 @@ class DomeToolKit:
 	logger.info("DomeAuto")
         self.__ToggleButton("FB_DOME_AUTO",state)
 
-    def DomeLatchDisable(self,state):
-	logger.info("DomeLatchDisable")
+    def DomeLatchEnable(self,state):
+	logger.info("DomeLatchEnable")
         self.__ToggleButton("FB_LATCH",state)
 
 if __name__ == "__main__":
