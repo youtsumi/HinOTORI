@@ -22,11 +22,16 @@ def CalcCoord(obj):
 	ra1, dec1 = ShowCoord(Cor1)
 	return obj,Cor,Cor1,ra,dec,ra1,dec1
 
+#def AddTarget2List(FLIST):
+#	if os.path.exits(FLIST):
+#		with open(FLIST,"r") as f:
+			
+
 def main(obj):
 	obj,Cor,Cor1,ra,dec,ra1,dec1 = CalcCoord(obj)
 	print("Object: %s"%obj)
-	print("J2000\n%s %s"%(ra,dec))
-	print("current equinox\n%s %s"%(ra1,dec1))
+	print("J2000\n%s %s\n%s"%(ra,dec,Cor.to_string('hmsdms')))
+	print("current equinox\n%s %s\n%s"%(ra1,dec1,Cor1.to_string('hmsdms')))
 
 parser = argparse.ArgumentParser(
         prog="Convert Coordinate from Object",

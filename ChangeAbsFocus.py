@@ -17,7 +17,7 @@ args = parser.parse_args()
 #if Check == 0:
 #    sys.exit(0)
 try:
-    cmd = "./TelescopeClient.py afocus %s"%args.absolute
+    cmd = "TelescopeClient.py afocus %s"%args.absolute
     os.system(cmd)
 except:
     print("WARNING: Telescope cannot communicate")

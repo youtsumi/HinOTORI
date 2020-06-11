@@ -6,6 +6,6 @@ import sys, os
 #Check = SrvCheck.CheckServer(Srv)
 #if Check == 0:
 #    sys.exit(0)
-cmd = "./DomeClient.py close"
+cmd = "DomeClient.py close"
 os.system(cmd)
 
