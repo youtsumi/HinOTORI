@@ -1,6 +1,7 @@
 #!/usr/bin/python
 from astropy.io import fits as pf
 from astropy.time import Time
+import numpy as np
 import sys,os,glob
 import numpy as np
 sys.path.append("/home/utsumi/bin")
@@ -74,5 +75,3 @@ if __name__ == '__main__':
     np.savetxt(outf,data,delimitr="\t",fmt="$s")
     currentdir = ChangeDir(currentdir)
     print("Saved log file is : \n%s" % os.path.join(currentdir, outf))
-
-
