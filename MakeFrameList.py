@@ -3,6 +3,7 @@ from astropy.io import fits as pf
 from astropy.time import Time
 import numpy as np
 import sys,os,glob
+import numpy as np
 sys.path.append("/home/utsumi/bin")
 import config
 import argparse
@@ -61,18 +62,16 @@ args = parser.parse_args()
 
 
 if __name__ == '__main__':
-	import glob
-	currentdir = ChangeDir(args.directory)
-	LIST   = sorted(glob.glob("*-?.fits"))
-	Column = ["EXPID","FRAMEID","MODE","EXPTIME","FILTER","RA","DEC","OBJECT","CDITH","NDITH","MJD","MEAN","MEDIAN","STD","MAX"]
-	aa     = [Column]
-	for F1 in LIST:
-		aa.append(Header(F1))
+    import glob
+    currentdir = ChangeDir(args.directory)
+    LIST   = sorted(glob.glob("*-?.fits"))
+    Column = ["EXPID","FRAMEID","MODE","EXPTIME","FILTER","RA","DEC","OBJECT","CDITH","NDITH","MJD","MEAN","MEDIAN","STD","MAX"]
+    aa     = [Column]
+    for F1 in LIST:
+        aa.append(Header(F1))
 
-	outf = "header.log"
-	data = np.array(aa)
-	np.savetxt(outf,data,delimiter="\t",fmt="%s")
-	currentdir = ChangeDir(currentdir)
-	print("Saved log file is : \n%s" % os.path.join(currentdir, outf))
-
-
+    outf = "header.log"
+    data = np.array(aa)
+    np.savetxt(outf,data,delimitr="\t",fmt="$s")
+    currentdir = ChangeDir(currentdir)
+    print("Saved log file is : \n%s" % os.path.join(currentdir, outf))
