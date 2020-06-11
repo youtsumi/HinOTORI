@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 import sys, traceback, Ice, os
-Ice.loadSlice("HinOTORI.ice")
+Ice.loadSlice("/home/utsumi/bin/HinOTORI.ice")
 import HinOTORI
 from optparse import OptionParser
+sys.path.append("/home/utsumi/bin")
 import config
 
 status = 0

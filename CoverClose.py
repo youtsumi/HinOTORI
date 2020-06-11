@@ -7,6 +7,6 @@ import sys, os
 #if Check == 0:
 #    sys.exit(0)
 #else:
-cmd = "./TelescopeClient.py close"
+cmd = "TelescopeClient.py close"
 os.system(cmd)
 

@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 import sys, traceback, Ice, os
-Ice.loadSlice("HinOTORI.ice")
+Ice.loadSlice("/home/utsumi/bin/HinOTORI.ice")
 import HinOTORI
+sys.path.append("/home/utsumi/bin")
 import MultiExposure
 import time
 import config

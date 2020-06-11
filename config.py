@@ -74,20 +74,28 @@ mount = {
 
 ### A directory to be stored
 import datetime,os
+DATADIR = "/run/media/utsumi/HinoTori/data/"
+#DATADIR = "/mnt/disk2/datatemp/"
 #DATADIR = "/mnt/disk1/data/"
-DATADIR = "/home/utsumi/Data/"
-DATE    = datetime.datetime.utcnow().strftime("%Y%m%d") + "/"
+#DATADIR = "/home/utsumi/Data/"
+TIME    = datetime.datetime.utcnow() + datetime.timedelta(hours=-5)
+DATE    = TIME.strftime("%Y%m%d") + "/"
 if os.path.isdir(DATADIR):
 	targetdir = os.path.join(DATADIR,DATE)
 else:
 	targetdir = os.path.join("/home/utsumi/data/",DATE)
 
 ### Stored Number of Obtained Data Frame
-EXPFile = os.path.join(DATADIR,"CurrentEXPID")
+#EXPFile = os.path.join(DATADIR,"CurrentEXPID")
+EXPFile = os.path.join("/home/utsumi","CurrentEXPID")
 FrameNCol = 7
 
+
 ### Stored Today's observational infomation
-ObsFile = os.path.join(DATADIR,"CurrentObsInfo")
+ObsFile = os.path.join("/home/utsumi","CurrentObsInfo")
+
+### Target list ###
+TargetList = os.path.join("/home/utsumi","Target.lst")
 
 ### focuser conversion factor
 focusconv = 0.254e-3    # in mm/step
