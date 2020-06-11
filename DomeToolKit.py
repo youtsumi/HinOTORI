@@ -68,6 +68,7 @@ def PressButton( key ):
 
 def OneCommand(line):
 
+    logger.debug(line)
     status = {}
     for k, v in grammer.iteritems():
         register, offset, mask = v
@@ -137,6 +138,9 @@ class DomeToolKit:
         self.p = Process(target=SocketManager, args=(port,self.status,self.sendbuf) )
 	self.p.daemon=True
         self.p.start()
+
+    def __del__(self):
+        self.p.terminate() ## new
 
     def __com(self,msg):
 	self.sendbuf.append(msg)
