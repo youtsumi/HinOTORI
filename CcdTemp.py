@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 import sys, traceback, Ice, os
-Ice.loadSlice("HinOTORI.ice")
+Ice.loadSlice("/home/utsumi/bin/HinOTORI.ice")
 import HinOTORI
 from optparse import OptionParser
+sys.path.append("/home/utsumi/bin")
 import config
 
 
@@ -28,7 +29,7 @@ class CameraClient(Ice.Application):
 					config.nodesetting['camera']['port'] ))
 			ptr = HinOTORI.CameraPrx.checkedCast(obj)
 			setp =float(self.options.setp)
-			print "self.options.setp %lf" % setp
+			print("self.options.setp %lf" % setp)
 			ptr.SetTemperature(setp)
 
 	def GetTemperature(self):
@@ -41,7 +42,7 @@ class CameraClient(Ice.Application):
 					config.nodesetting['camera']['ip'], \
 					config.nodesetting['camera']['port'] ))
 			ptr = HinOTORI.CameraPrx.checkedCast(obj)
-			print "CCD temperature is %lf" % ptr.GetTemperature()
+			print("CCD temperature is %lf" % ptr.GetTemperature())
 
 
 	def parseoptions(self,args):

@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 import sys, traceback, Ice, os
-Ice.loadSlice("HinOTORI.ice")
+Ice.loadSlice("/home/utsumi/bin/HinOTORI.ice")
 import HinOTORI
 from optparse import OptionParser
+sys.path.append("/home/utsumi/bin")
 import config
 
 status = 0
@@ -32,8 +33,14 @@ class TelescopeClient(Ice.Application):
 			elif self.args[1] == "close":
 				print "close"
 				telescope.CloseMirror()
-			elif self.args[1] == "focus":
+			elif self.args[1] == "cfocus":
+				print telescope.GetFocusZ()
+			elif self.args[1] == "afocus":
 				telescope.SetFocusZ(float(self.args[2]))
+				print telescope.GetFocusZ()
+			elif self.args[1] == "rfocus":
+				Pos = telescope.GetFocusZ()
+				telescope.SetFocusZ(float(Pos)+float(self.args[2]))
 				print telescope.GetFocusZ()
 
 			else:

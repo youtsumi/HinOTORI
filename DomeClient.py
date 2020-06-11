@@ -34,6 +34,15 @@ class DomeClient(Ice.Application):
 				print "close"
 				dome.slitClose()
 
+			elif self.args[1] == "getState":
+				print "dome.isSlitOpened()     = ", dome.isSlitOpened()
+				print "dome.isSlitClosed()     = ", dome.isSlitClosed()
+				print "dome.Alarm1()           = ", dome.Alarm1()
+				print "dome.Alarm2()           = ", dome.Alarm2()
+				print "dome.Alarm3()           = ", dome.Alarm3()
+				print "dome.TargetDirection()  = ", dome.TargetDirection()
+				print "dome.CurrentDirection() = ", dome.CurrentDirection()
+
 			else:
 				print "no such command %s" % self.args[1]
 

@@ -1,0 +1,14 @@
+#!/bin/bash
+### Startup Servers
+StopServer.py MountSrv.py
+StopServer.py CameraSrv.py
+#StopServer.py DomeSrv.py
+#StopServer.py TelescopeSrv.py
+
+### Cooling CCD
+#CcdTemp.py -t
+
+### Set Focus to Default
+#ChackFocus.py
+#ChangeAbsFocus.py 2.3
+
