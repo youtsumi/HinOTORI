@@ -78,7 +78,7 @@ def OneCommand(line):
             value=line[offset:offset+mask.bit_length()/4]
         else:
             value=0 if int(line[offset],16)&mask==0 else 1
-#	print k, offset, mask, value
+#        print k, offset, mask, value
         status.update({k:value})
 
     return status
@@ -96,39 +96,39 @@ def SocketManager( port, status, sendbuf):
     time.sleep(1)
     msg=""
     while True:
-	msg+=ser.read(100)
-	idx1 = msg.find(":AS03")
-	if idx1 == -1:
-	    continue
-	idx2 = msg.find(":AS03",idx1+1)
-	if idx2 == -1:
-	    continue
-	line=msg[idx1:idx2]
+        msg+=ser.read(100)
+        idx1 = msg.find(":AS03")
+        if idx1 == -1:
+            continue
+        idx2 = msg.find(":AS03",idx1+1)
+        if idx2 == -1:
+            continue
+        line=msg[idx1:idx2]
 
-	stx=0
-	result = {}
-	while len(line)>length:
-	    line=line[stx:]
-	    stx=line.index(":")
-	    etx=line.index("#",stx)
-	    status.update(OneCommand(line[stx:etx+1]))
-	    stx=etx+1                
+        stx=0
+        result = {}
+        while len(line)>length:
+            line=line[stx:]
+            stx=line.index(":")
+            etx=line.index("#",stx)
+            status.update(OneCommand(line[stx:etx+1]))
+            stx=etx+1                
 
-	logger.debug(status)
+        logger.debug(status)
 
-	# clear buffer if the queue is too long
-	if len(msg)>1024:
-	    msg = ""
-	else:
-	    msg = msg[idx2:]
+        # clear buffer if the queue is too long
+        if len(msg)>1024:
+            msg = ""
+        else:
+            msg = msg[idx2:]
 
-	# send message
-	if len(sendbuf)==0:
-	    continue
+        # send message
+        if len(sendbuf)==0:
+            continue
 
-	sendmsg=sendbuf.pop(0)
-	logger.debug("Send this message: "+ sendmsg)
-	ser.write(sendmsg)
+        sendmsg=sendbuf.pop(0)
+        logger.debug("Send this message: "+ sendmsg)
+        ser.write(sendmsg)
         
 class DomeToolKit:
     def __init__(self,port):
@@ -136,15 +136,15 @@ class DomeToolKit:
         self.status=manager.dict()
         self.sendbuf=manager.list()
         self.p = Process(target=SocketManager, args=(port,self.status,self.sendbuf) )
-	self.p.daemon=True
+        self.p.daemon=True
         self.p.start()
 
     def __del__(self):
         self.p.terminate() ## new
 
     def __com(self,msg):
-	self.sendbuf.append(msg)
-	self.sendbuf.append(MakeNormalMessage(3))
+        self.sendbuf.append(msg)
+        self.sendbuf.append(MakeNormalMessage(3))
 
     def __ToggleButton(self,key,state):
         if state==True:
@@ -157,30 +157,30 @@ class DomeToolKit:
             self.__com(PressButton(key))
 
     def SetDateTime(self):
-	logger.info("Set datetime")
-	self.sendbuf.append(":WR07%s#" % datetime.datetime.now().strftime("%y%m%d%H%M%S"))
+        logger.info("Set datetime")
+        self.sendbuf.append(":WR07%s#" % datetime.datetime.now().strftime("%y%m%d%H%M%S"))
 
     def SetTelescopeNumber(self,telescopenumber):
-	if telescopenumber < 0 or telescopenumber > 6:
-	    raise Exception("Invalid value is given for telescopenumber")
-	logger.info("Set telescope number as %d" % telescopenumber)
-	self.sendbuf.append(":WR09%02d#" % int(telescopenumber) )
+        if telescopenumber < 0 or telescopenumber > 6:
+            raise Exception("Invalid value is given for telescopenumber")
+        logger.info("Set telescope number as %d" % telescopenumber)
+        self.sendbuf.append(":WR09%02d#" % int(telescopenumber) )
 
     def SetLatchTimer(self,latchtimer):
-	if latchtimer < 0 or latchtimer > 999:
-	    raise Exception("Invalid value is given for latchtimer")
-	logger.info("Set latchtimer as %d" % latchtimer)
-	self.sendbuf.append(":WR0a%03d#" % int(latchtimer) )
+        if latchtimer < 0 or latchtimer > 999:
+            raise Exception("Invalid value is given for latchtimer")
+        logger.info("Set latchtimer as %d" % latchtimer)
+        self.sendbuf.append(":WR0a%03d#" % int(latchtimer) )
 
     def SlitOpen(self,state=False):
-    	"""Note that low (False) is active"""
-	logger.info("SlitOpen")
-        self.__ToggleButton("FB_SLIT_OPEN",state)
+            """Note that low (False) is active"""
+        logger.info("SlitOpen")
+        self.PressButton("FB_SLIT_OPEN",state)
 
     def SlitClose(self,state=False):
-    	"""Note that low (False) is active"""
-	logger.info("SlitClose")
-        self.__ToggleButton("FB_SLIT_CLOSE",state)
+            """Note that low (False) is active"""
+        logger.info("SlitClose")
+        self.PressButton("FB_SLIT_CLOSE",state)
 
     def PressButton(self,button,state):        
         # if already it is in the state just return
