@@ -172,31 +172,33 @@ class DomeToolKit:
 	logger.info("Set latchtimer as %d" % latchtimer)
 	self.sendbuf.append(":WR0a%03d#" % int(latchtimer) )
 
-    def SlitAutoCloseOff(self,state):
-	logger.info("SlitAutoCloseOff")
-        self.__ToggleButton("FB_SLIT_AUTO_CLOSE",state)
-
     def SlitOpen(self,state=False):
     	"""Note that low (False) is active"""
-        if self.status["SLIT_OPENED"]==0:
-            return
 	logger.info("SlitOpen")
         self.__ToggleButton("FB_SLIT_OPEN",state)
 
     def SlitClose(self,state=False):
     	"""Note that low (False) is active"""
-        if self.status["SLIT_CLOSED"]==0:
-            return
 	logger.info("SlitClose")
         self.__ToggleButton("FB_SLIT_CLOSE",state)
 
+    def PressButton(self,button,state):        
+        # if already it is in the state just return
+        if ( self.status[button]==0 ) & ( state == True ):
+            return
+        if ( self.status[button]==1 ) & ( state == False ):
+            return
+        logger.info(button)
+        self.__com(PressButton(button))
+
+    def SlitAutoCloseOff(self,state):        
+        self.PressButton("FB_SLIT_AUTO_CLOSE",state)
+
     def DomeAuto(self,state):
-	logger.info("DomeAuto")
-        self.__ToggleButton("FB_DOME_AUTO",state)
+        self.PressButton("FB_DOME_AUTO",state)
 
     def DomeLatchEnable(self,state):
-	logger.info("DomeLatchEnable")
-        self.__ToggleButton("FB_LATCH",state)
+        self.PressButton("FB_LATCH",state)
 
 if __name__ == "__main__":
 #    Dome = DomeToolKitSimulator()
