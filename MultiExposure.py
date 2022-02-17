@@ -15,7 +15,6 @@ def GetCamConnections( ):
 	#look for usb cameras first
 	devices = SetupDevice.GetUsbDevices()
 
-
 	# no usb cameras, then look for ethernet cameras
 	if( len(devices) == 0 ):
 	    devices = SetupDevice.GetEthernetDevices()
@@ -29,6 +28,7 @@ def GetCamConnections( ):
 
 	for cam in cams:
 		print cam.GetSerialNumber()
+		cam.SetDigitizeOverscan(True)
 
 	return cams
 
